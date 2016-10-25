@@ -7,12 +7,30 @@ import java.sql.SQLException;
 
 public class DatamapperListFilm extends Datamapper<ListFilm>{
 
-    public ListFilm getList(int id){
-        return load(createLoadQuery(id));
+    public ListFilm getList(int id, int idUser){
+        return load(createLoadQuery(id, idUser));
     }
 
-    private String createLoadQuery(int id) {
-        return "SELECT * FROM listfilm WHERE id = '"+id+"'";
+    public void deleteListFilm(int id, int idUser) {
+        createDeleteUpdate(createDeleteQuery(id, idUser));
+    }
+
+    public void changeTitle (int id,int idUser, String title){
+        createDeleteUpdate(createChangeTitleQuery(id, idUser, title));
+    }
+
+    public void createListFilm (int id, int idUser, String title){
+        createDeleteUpdate(createQuery(id, idUser, title));
+    }
+
+    public void addFilmInList(int idList, int idFilm){
+        if (load(createQuery(idList, idFilm)) == null){
+            createDeleteUpdate(createAddFilmQuery(idList, idFilm));
+        }
+    }
+
+    public void deleteFilmInList(int idList, int idFilm){
+        createDeleteUpdate(createDeleteFilmQuery(idList, idFilm));
     }
 
     @Override
@@ -27,20 +45,32 @@ public class DatamapperListFilm extends Datamapper<ListFilm>{
         return null;
     }
 
-    public void deleteListFilm(int id) {
-        updateOrDelete(createDeleteQuery(id));
+    private String createDeleteFilmQuery(int idList, int idFilm) {
+        return "DELETE FROM listhavefilm WHERE idList = '"+idList+"' AND idFilm = '"+idFilm+"'";
     }
 
-    private String createDeleteQuery(int id) {
-        return "DELETE FROM listfilm WHERE id = '"+id+"' ";
+    private String createAddFilmQuery(int idList, int idFilm) {
+        return "INSERT INTO listhavefilm (idList, idFilm) VALUES ('"+idList+"', '"+idFilm+"')";
     }
 
-    public void changeTitle (int id, String title){
-        updateOrDelete(createChangeTitleQuery(id, title));
+    private String createLoadQuery(int id, int idUser) {
+        return "SELECT * FROM listfilm WHERE id = '"+id+"' AND idUser = '"+idUser+"'";
     }
 
-    private String createChangeTitleQuery(int id, String title) {
-        return "UPDATE listfilm SET title='"+title+"' WHERE id='"+id+"'";
+    private String createDeleteQuery(int id, int idUser) {
+        return "DELETE FROM listfilm WHERE id = '"+id+"', idUser = '"+idUser+"' ";
+    }
+
+    private String createChangeTitleQuery(int id, int idUser, String title) {
+        return "UPDATE listfilm SET title='"+title+"' WHERE id='"+id+"' AND idUser = '"+idUser+"'";
+    }
+
+    private String createQuery(int id, int idUser, String title) {
+        return "INSERT INTO listfilm (id, idUser, title) VALUES ('"+id+"', '"+idUser+"', '"+title+"')";
+    }
+
+    private String createQuery(int idList, int idFilm) {
+        return "SELECT * FROM listhavefilm WHERE idList= '"+idList+"' AND idFilm = '"+idFilm+"'";
     }
 
 }

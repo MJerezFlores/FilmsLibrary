@@ -11,9 +11,19 @@ public class DatamapperUser extends Datamapper<User>{
         return load(createLoadQuery(id));
     }
 
-    private String createLoadQuery(int id) {
-        return "SELECT * FROM user WHERE id = '"+id+"'";
+    public void deleteUser(int id) {
+        createDeleteUpdate(createDeleteQuery(id));
     }
+
+    public void updateUser(int id, String nickname, String email, String password){
+        createDeleteUpdate(createChangeTitleQuery(id, nickname, email, password));
+    }
+
+    public void createUser(int id, String nickname, String email, String password){
+        createDeleteUpdate(createUserQuery(id, nickname, email, password));
+    }
+
+
     @Override
     protected User mapElement(ResultSet rs) {
         try {
@@ -26,16 +36,16 @@ public class DatamapperUser extends Datamapper<User>{
         return null;
     }
 
-    public void deleteUser(int id) {
-        updateOrDelete(createDeleteQuery(id));
+    private String createUserQuery(int id, String nickname, String email, String password) {
+        return "INSERT INTO user (id, nickname, email, password) VALUES ('"+id+"', '"+nickname+"', '"+email+"', '"+password+"')";
+    }
+
+    private String createLoadQuery(int id) {
+        return "SELECT * FROM user WHERE id = '"+id+"'";
     }
 
     private String createDeleteQuery(int id) {
         return "DELETE FROM user WHERE id = '"+id+"' ";
-    }
-
-    public void updateUser (int id, String nickname, String email, String password){
-        updateOrDelete(createChangeTitleQuery(id, nickname, email, password));
     }
 
     private String createChangeTitleQuery(int id, String nickname, String email, String password) {

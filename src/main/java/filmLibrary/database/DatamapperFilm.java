@@ -11,8 +11,20 @@ public class DatamapperFilm extends Datamapper<Film> {
         return load(createLoadQuery(id));
     }
 
-    private String createLoadQuery(int id) {
-        return ("SELECT * FROM film WHERE id = '"+id+"'");
+    public void updateFilm(int id, String title, String synopsis, int year, String director,
+                                   String actors, float rating, String path, String urlImage) {
+        createDeleteUpdate(createUpdateQuery(id, title, synopsis, year, director,
+                actors, rating, path, urlImage));
+    }
+
+    public void deleteFilm(int id) {
+        createDeleteUpdate(createDeleteQuery(id));
+    }
+
+    public void createFilm(int id, String title, String synopsis, int year, String director,
+                           String actors, float rating, String path, String urlImage) {
+        createDeleteUpdate(createFilmQuery(id, title, synopsis, year, director,
+                actors, rating, path, urlImage));
     }
 
     @Override
@@ -37,18 +49,16 @@ public class DatamapperFilm extends Datamapper<Film> {
 
     }
 
-    public void deleteFilm(int id) {
-        updateOrDelete(createDeleteQuery(id));
+    private String createFilmQuery(int id, String title, String synopsis, int year, String director, String actors, float rating, String path, String urlImage) {
+        return "INSERT INTO film (id, title, synopsis, year, director, actors, rating, path, urlImage) VALUES ('"+id+"', '"+title+"', '"+synopsis+"', '"+year+"', '"+director+"', '"+actors+"', '"+rating+"', '"+path+"', '"+urlImage+"')";
+    }
+
+    private String createLoadQuery(int id) {
+        return ("SELECT * FROM film WHERE id = '"+id+"'");
     }
 
     private String createDeleteQuery(int id) {
         return "DELETE FROM film where id = '"+id+"' ";
-    }
-
-    public void updateFilm(int id, String title, String synopsis, int year, String director,
-                           String actors, float rating, String path, String urlImage) {
-        String query = createUpdateQuery(id, title, synopsis, year, director, actors, rating, path, urlImage);
-        updateOrDelete(query);
     }
 
     private String createUpdateQuery(int id, String title, String synopsis, int year, String director, String actors,

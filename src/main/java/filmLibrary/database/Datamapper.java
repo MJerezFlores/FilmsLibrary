@@ -16,7 +16,7 @@ public abstract class Datamapper<T> {
         return null;
     }
 
-    protected void updateOrDelete(String query) {
+    protected void createDeleteUpdate(String query) {
         try {
             database.executeUpdate(query);
             System.out.println("Succesfully executed");
@@ -24,8 +24,6 @@ public abstract class Datamapper<T> {
             System.out.println("ExceptionBaseDeDatos: " + e.getMessage());
         }
     }
-
-
 
     protected abstract T mapElement(ResultSet resultSet);
 
