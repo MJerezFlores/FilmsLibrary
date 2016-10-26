@@ -12,15 +12,15 @@ public class DatamapperUser extends Datamapper<User>{
     }
 
     public void deleteUser(int id) {
-        createDeleteUpdate(createDeleteQuery(id));
+        update(createDeleteQuery(id));
     }
 
     public void updateUser(int id, String nickname, String email, String password){
-        createDeleteUpdate(createChangeTitleQuery(id, nickname, email, password));
+        update(createChangeTitleQuery(id, nickname, email, password));
     }
 
     public void createUser(int id, String nickname, String email, String password){
-        createDeleteUpdate(createUserQuery(id, nickname, email, password));
+        update(createUserQuery(id, nickname, email, password));
     }
 
 

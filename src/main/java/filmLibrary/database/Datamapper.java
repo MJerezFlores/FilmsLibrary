@@ -1,5 +1,6 @@
 package filmLibrary.database;
 import java.sql.*;
+import java.util.List;
 
 public abstract class Datamapper<T> {
 
@@ -7,7 +8,7 @@ public abstract class Datamapper<T> {
 
     protected T load(String query) {
         try {
-            T element = mapElement(database.executeQuery(query));
+            T element = mapElement(database.read(query));
             database.closeConnection();
             return element;
         } catch (Exception e) {
@@ -16,13 +17,25 @@ public abstract class Datamapper<T> {
         return null;
     }
 
-    protected void createDeleteUpdate(String query) {
+    protected void update(String query) {
         try {
-            database.executeUpdate(query);
+            database.update(query);
             System.out.println("Succesfully executed");
         } catch (Exception e) {
             System.out.println("ExceptionBaseDeDatos: " + e.getMessage());
         }
+    }
+
+    protected List loadIdFilmsOnList(int idList) {
+        String query = DatamapperListFilm.findIdFilmInListQuery(idList);
+        try {
+            List<Integer> element = DatamapperListFilm.mapIdFilms(database.read(query));
+            database.closeConnection();
+            return element;
+        } catch (Exception e) {
+            System.out.println("ExceptionBaseDeDatos: " + e.getMessage());
+        }
+        return null;
     }
 
     protected abstract T mapElement(ResultSet resultSet);

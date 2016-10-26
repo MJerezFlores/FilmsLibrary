@@ -13,17 +13,17 @@ public class DatamapperFilm extends Datamapper<Film> {
 
     public void updateFilm(int id, String title, String synopsis, int year, String director,
                                    String actors, float rating, String path, String urlImage) {
-        createDeleteUpdate(createUpdateQuery(id, title, synopsis, year, director,
+        update(createUpdateQuery(id, title, synopsis, year, director,
                 actors, rating, path, urlImage));
     }
 
     public void deleteFilm(int id) {
-        createDeleteUpdate(createDeleteQuery(id));
+        update(createDeleteQuery(id));
     }
 
     public void createFilm(int id, String title, String synopsis, int year, String director,
                            String actors, float rating, String path, String urlImage) {
-        createDeleteUpdate(createFilmQuery(id, title, synopsis, year, director,
+        update(createFilmQuery(id, title, synopsis, year, director,
                 actors, rating, path, urlImage));
     }
 

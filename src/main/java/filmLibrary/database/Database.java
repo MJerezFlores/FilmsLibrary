@@ -12,17 +12,16 @@ public class Database {
         this.password = password;
     }
 
-    public ResultSet executeQuery(String query) throws SQLException {
+    public ResultSet read(String query) throws SQLException {
         connection = getConnection();
         Statement st = connection.createStatement();
         return st.executeQuery(query);
     }
 
-    public void executeUpdate(String query) throws SQLException {
+    public void update(String query) throws SQLException {
         connection = getConnection();
         Statement st = connection.createStatement();
-        int i = st.executeUpdate(query);
-        System.out.println(i);
+        st.executeUpdate(query);
     }
 
     public void closeConnection() throws SQLException {

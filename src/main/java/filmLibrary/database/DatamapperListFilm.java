@@ -4,6 +4,8 @@ import filmLibrary.model.ListFilm;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class DatamapperListFilm extends Datamapper<ListFilm>{
 
@@ -12,32 +14,38 @@ public class DatamapperListFilm extends Datamapper<ListFilm>{
     }
 
     public void deleteListFilm(int id, int idUser) {
-        createDeleteUpdate(createDeleteQuery(id, idUser));
+        update(createDeleteListOnFilmQuery(id));
+        update(createDeleteListQuery(id, idUser));
     }
 
     public void changeTitle (int id,int idUser, String title){
-        createDeleteUpdate(createChangeTitleQuery(id, idUser, title));
+        update(createChangeTitleQuery(id, idUser, title));
     }
 
     public void createListFilm (int id, int idUser, String title){
-        createDeleteUpdate(createQuery(id, idUser, title));
+        update(createQuery(id, idUser, title));
     }
 
     public void addFilmInList(int idList, int idFilm){
-        if (load(createQuery(idList, idFilm)) == null){
-            createDeleteUpdate(createAddFilmQuery(idList, idFilm));
+        if (existAlreadyFilm(idList, idFilm)){
+            update(addFilmQuery(idList, idFilm));
         }
     }
 
     public void deleteFilmInList(int idList, int idFilm){
-        createDeleteUpdate(createDeleteFilmQuery(idList, idFilm));
+        update(createDeleteFilmQuery(idList, idFilm));
     }
 
     @Override
     protected ListFilm mapElement(ResultSet rs) {
         try {
             while(rs.next()){
-                return new ListFilm(rs.getInt("id"), rs.getString("title"));
+                List idFilms = loadIdFilmsOnList(rs.getInt("id"));
+                ListFilm listFilm = new ListFilm(rs.getInt("id"), rs.getString("title"));
+                for (Object id: idFilms) {
+                    listFilm.add(new DatamapperFilm().getFilm((Integer) id));
+                }
+                return listFilm;
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -45,11 +53,32 @@ public class DatamapperListFilm extends Datamapper<ListFilm>{
         return null;
     }
 
+    protected static List<Integer> mapIdFilms(ResultSet rs) {
+        List<Integer> idFilms = new ArrayList<Integer>();
+        try {
+            while (rs.next()){
+                idFilms.add(rs.getInt("idFilm"));
+            }
+            return idFilms;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    protected static String findIdFilmInListQuery(int idList) {
+        return "SELECT idFilm FROM listhavefilm WHERE idList = '"+idList+"'";
+    }
+
+    private boolean existAlreadyFilm(int idList, int idFilm) {
+        return load(findFilmOnListQuery(idList, idFilm)) == null;
+    }
+
     private String createDeleteFilmQuery(int idList, int idFilm) {
         return "DELETE FROM listhavefilm WHERE idList = '"+idList+"' AND idFilm = '"+idFilm+"'";
     }
 
-    private String createAddFilmQuery(int idList, int idFilm) {
+    private String addFilmQuery(int idList, int idFilm) {
         return "INSERT INTO listhavefilm (idList, idFilm) VALUES ('"+idList+"', '"+idFilm+"')";
     }
 
@@ -57,8 +86,12 @@ public class DatamapperListFilm extends Datamapper<ListFilm>{
         return "SELECT * FROM listfilm WHERE id = '"+id+"' AND idUser = '"+idUser+"'";
     }
 
-    private String createDeleteQuery(int id, int idUser) {
-        return "DELETE FROM listfilm WHERE id = '"+id+"', idUser = '"+idUser+"' ";
+    private String createDeleteListQuery(int id, int idUser) {
+        return "DELETE FROM listfilm WHERE id = '"+id+"' AND idUser = '"+idUser+"' ";
+    }
+
+    private String createDeleteListOnFilmQuery(int idList) {
+        return "DELETE FROM listhavefilm WHERE idList = '"+idList+"'";
     }
 
     private String createChangeTitleQuery(int id, int idUser, String title) {
@@ -69,8 +102,9 @@ public class DatamapperListFilm extends Datamapper<ListFilm>{
         return "INSERT INTO listfilm (id, idUser, title) VALUES ('"+id+"', '"+idUser+"', '"+title+"')";
     }
 
-    private String createQuery(int idList, int idFilm) {
+    private String findFilmOnListQuery(int idList, int idFilm) {
         return "SELECT * FROM listhavefilm WHERE idList= '"+idList+"' AND idFilm = '"+idFilm+"'";
     }
+
 
 }
