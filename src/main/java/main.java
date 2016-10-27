@@ -1,3 +1,4 @@
+import filmLibrary.ModifyListFilms;
 import spark.Spark;
 
 import java.lang.reflect.Method;
@@ -10,7 +11,7 @@ public class main {
 
         Spark.staticFiles.location("/public");
 
-        get("/film/:filmID", (req, res) -> { return "{"+
+        get("/filmLibrary.model.Film/:filmID", (req, res) -> { return "{"+
                 "'id': "+ req.params(":filmID")+","+
                 "'title': 'Hypnosis',"+
                 "'synopsis': 'asdasdadasdadasdasdasdasdasdasdasdasd'',"+
@@ -23,14 +24,14 @@ public class main {
                 "'rating': '9.4',"+
                 "}";});
 
-        delete("/film/:filmID", (req, res) -> { return "{"+
+        delete("/filmLibrary.model.Film/:filmID", (req, res) -> { return "{"+
                 "'id': "+ req.params(":filmID")+","+
                 "'title': 'Hypnosis',"+
                 "'img': 'url',"+
                 "'rating': '8.2'"+
                 "}";});
 
-        post("/film/add", (req, res) -> "{"+
+        post("/filmLibrary.model.Film/add", (req, res) -> "{"+
                 "'id' : 234,"+
                 "'title': 'Hypnosis',"+
                 "'synopsis': 'asdasdadasdadasdasdasdasdasdasdasdasd'',"+
@@ -43,7 +44,7 @@ public class main {
                 "'rating': '9.4',"+
                 "}");
 
-        post("/film/:filmID", (req, res) -> { return "{"+
+        post("/filmLibrary.model.Film/:filmID", (req, res) -> { return "{"+
                 "'id': "+ req.params(":filmID")+","+
                 "'title': 'Hypnosis',"+
                 "'synopsis': 'asdasdadasdadasdasdasdasdasdasdasdasd'',"+
@@ -96,7 +97,7 @@ public class main {
 
         post("/list/:listFilmID/:action/:parameter/modify", (req, res) -> {
             try {
-                modifyListFilms modifyList = new modifyListFilms();
+                ModifyListFilms modifyList = new ModifyListFilms();
                 Method method = modifyList.getClass().getMethod(req.params(":action"), String.class, String.class);
                 return (String) method.invoke(modifyList,req.params(":listFilmID"), req.params(":parameter"));
             }catch (Exception e){
