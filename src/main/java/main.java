@@ -1,4 +1,4 @@
-import filmLibrary.modifyListFilms;
+import filmLibrary.ModifyListFilms;
 import spark.Spark;
 
 import java.lang.reflect.Method;
@@ -97,7 +97,7 @@ public class main {
 
         post("/list/:listFilmID/:action/:parameter/modify", (req, res) -> {
             try {
-                modifyListFilms modifyList = new modifyListFilms();
+                ModifyListFilms modifyList = new ModifyListFilms();
                 Method method = modifyList.getClass().getMethod(req.params(":action"), String.class, String.class);
                 return (String) method.invoke(modifyList,req.params(":listFilmID"), req.params(":parameter"));
             }catch (Exception e){

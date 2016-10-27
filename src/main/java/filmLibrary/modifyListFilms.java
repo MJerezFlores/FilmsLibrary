@@ -1,6 +1,6 @@
 package filmLibrary;
 
-public class modifyListFilms {
+public class ModifyListFilms {
 
     public String addFilm(String id, String parameter){
         return modifyInfo(id, parameter);
