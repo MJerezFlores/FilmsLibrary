@@ -1,5 +1,6 @@
 package filmLibrary.database;
 import java.sql.*;
+import java.util.LinkedList;
 import java.util.List;
 
 public abstract class Datamapper<T> {
@@ -11,6 +12,21 @@ public abstract class Datamapper<T> {
             T element = mapElement(database.read(query));
             database.closeConnection();
             return element;
+        } catch (Exception e) {
+            System.out.println("ExceptionBaseDeDatos: " + e.getMessage());
+        }
+        return null;
+    }
+
+    protected List<T> multipleLoad(String query) {
+        try {
+            LinkedList list = new LinkedList();
+            ResultSet resultSet = database.read(query);
+            while(resultSet.next()){
+                list.add(mapElement(resultSet));
+            }
+            database.closeConnection();
+            return list;
         } catch (Exception e) {
             System.out.println("ExceptionBaseDeDatos: " + e.getMessage());
         }

@@ -1,23 +1,19 @@
 package filmLibrary;
 
+import filmLibrary.database.DatamapperListFilm;
+
 public class ModifyListFilms {
 
-    public String addFilm(String id, String parameter){
-        return modifyInfo(id, parameter);
+    public void addFilm(int id, String filmID){
+        new DatamapperListFilm().addFilmInList(id,Integer.parseInt(filmID));
     }
 
-    public String deleteFilm(String id, String parameter){
-        return modifyInfo(id, parameter);
+    public void deleteFilm(int id, String filmID){
+        new DatamapperListFilm().deleteFilmInList(id,Integer.parseInt(filmID));
     }
 
-    public String modifyTile(String id, String parameter){
-        return modifyInfo(id, parameter);
+    public void modifyTitle(int id, String title){
+        new DatamapperListFilm().changeTitle(id,title);
     }
 
-    public String modifyInfo(String id, String parameter){
-        return "{" +
-                "'id': " + id + "," +
-                "'parameter':" + parameter +
-                "}";
-    };
 }

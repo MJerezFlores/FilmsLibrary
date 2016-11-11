@@ -11,20 +11,18 @@ public class DatamapperFilm extends Datamapper<Film> {
         return load(createLoadQuery(id));
     }
 
-    public void updateFilm(int id, String title, String synopsis, int year, String director,
-                                   String actors, float rating, String path, String urlImage) {
-        update(createUpdateQuery(id, title, synopsis, year, director,
-                actors, rating, path, urlImage));
+    public void updateFilm(Film film) {
+        update(createUpdateQuery(film.getId(), film.getTitle(), film.getSynopsis(), film.getYear(), film.getDirector(),
+                film.getActors(), film.getRating(), film.getPath(), film.getUrlImage()));
     }
 
     public void deleteFilm(int id) {
         update(createDeleteQuery(id));
     }
 
-    public void createFilm(int id, String title, String synopsis, int year, String director,
-                           String actors, float rating, String path, String urlImage) {
-        update(createFilmQuery(id, title, synopsis, year, director,
-                actors, rating, path, urlImage));
+    public void createFilm(Film film) {
+        update(createFilmQuery(film.getTitle(), film.getSynopsis(), film.getYear(), film.getDirector(),
+                film.getActors(), film.getRating(), film.getPath(), film.getUrlImage()));
     }
 
     @Override
@@ -49,8 +47,8 @@ public class DatamapperFilm extends Datamapper<Film> {
 
     }
 
-    private String createFilmQuery(int id, String title, String synopsis, int year, String director, String actors, float rating, String path, String urlImage) {
-        return "INSERT INTO film (id, title, synopsis, year, director, actors, rating, path, urlImage) VALUES ('"+id+"', '"+title+"', '"+synopsis+"', '"+year+"', '"+director+"', '"+actors+"', '"+rating+"', '"+path+"', '"+urlImage+"')";
+    private String createFilmQuery(String title, String synopsis, int year, String director, String actors, float rating, String path, String urlImage) {
+        return "INSERT INTO film (title, synopsis, year, director, actors, rating, path, urlImage) VALUES ('"+title+"', '"+synopsis+"', '"+year+"', '"+director+"', '"+actors+"', '"+rating+"', '"+path+"', '"+urlImage+"')";
     }
 
     private String createLoadQuery(int id) {
@@ -66,6 +64,7 @@ public class DatamapperFilm extends Datamapper<Film> {
         return "UPDATE film SET title='"+title+"', synopsis='"+synopsis+"',year='"+year+"',director='"+director+"'," +
                 "actors='"+actors+"', rating='"+rating+"', path='"+path+"', urlImage='"+urlImage+"' WHERE id='"+id+"'";
     }
+
 
 }
 
