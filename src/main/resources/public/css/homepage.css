@@ -29,10 +29,23 @@ body{background-color: black;}
     width:5%;
 }
 
+h3, h1, h2{
+    color:white;
+}
+
+p{
+    font-family: "Lucida Sans";
+    color: darkgrey;
+}
+
 
 /********************/
 /*CAROUSEL CARTELERA*/
 /*******************/
+
+.lists{
+    padding-top:3%;
+}
 
 .carousel-showsixmoveone .carousel-control {
     width: 4%;
@@ -277,7 +290,7 @@ nav.navbar.scroll{
 }
 
 .titleRight{
-    margin-left: 5%;
+    margin-left: 3%;
     float:left;
 }
 
@@ -328,4 +341,23 @@ nav.navbar.scroll{
     float:left;
     margin-top: 3%;
     margin-left: 2.5%;
+}
+
+
+.thumb {
+    float:left; /* must be floated for same cross browser position of larger image */
+    position:relative;
+}
+
+.emergentInfo{
+    background-color: whitesmoke;
+
+}
+.thumb span {
+    position:absolute;
+    visibility:hidden;
+}
+.thumb:hover span {
+    visibility:visible;
+    top:37px; left:37px;
 }
