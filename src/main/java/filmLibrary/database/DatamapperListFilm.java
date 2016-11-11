@@ -9,27 +9,31 @@ import java.util.List;
 
 public class DatamapperListFilm extends Datamapper<ListFilm>{
 
-    public ListFilm getList(int id, int idUser){
-        return load(createLoadQuery(id, idUser));
+    public ListFilm getList(int id){
+        return load(createLoadQuery(id));
     }
 
-    public void deleteListFilm(int id, int idUser) {
+    public void deleteListFilm(int id) {
         update(createDeleteListOnFilmQuery(id));
-        update(createDeleteListQuery(id, idUser));
+        update(createDeleteListQuery(id));
     }
 
-    public void changeTitle (int id,int idUser, String title){
-        update(createChangeTitleQuery(id, idUser, title));
+    public void changeTitle (int id, String title){
+        update(createChangeTitleQuery(id, title));
     }
 
-    public void createListFilm (int id, int idUser, String title){
-        update(createQuery(id, idUser, title));
+    public void createListFilm (ListFilm listFilm){
+        update(createQuery(listFilm.getNickname(), listFilm.getTitle()));
     }
 
     public void addFilmInList(int idList, int idFilm){
         if (existAlreadyFilm(idList, idFilm)){
             update(addFilmQuery(idList, idFilm));
         }
+    }
+
+    public List<ListFilm> getMainLists(String nickname, int limit) {
+        return multipleLoad(getFirstListsQuery(nickname, limit));
     }
 
     public void deleteFilmInList(int idList, int idFilm){
@@ -39,14 +43,12 @@ public class DatamapperListFilm extends Datamapper<ListFilm>{
     @Override
     protected ListFilm mapElement(ResultSet rs) {
         try {
-            while(rs.next()){
-                List idFilms = loadIdFilmsOnList(rs.getInt("id"));
-                ListFilm listFilm = new ListFilm(rs.getInt("id"), rs.getString("title"));
-                for (Object id: idFilms) {
-                    listFilm.add(new DatamapperFilm().getFilm((Integer) id));
-                }
-                return listFilm;
+            ListFilm listFilm = new ListFilm(rs.getInt("id"), rs.getString("nickname"), rs.getString("title"));
+            List idFilms = loadIdFilmsOnList(rs.getInt("id"));
+            for (Object id: idFilms) {
+                listFilm.add(new DatamapperFilm().getFilm((Integer) id));
             }
+            return listFilm;
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -82,24 +84,24 @@ public class DatamapperListFilm extends Datamapper<ListFilm>{
         return "INSERT INTO listhavefilm (idList, idFilm) VALUES ('"+idList+"', '"+idFilm+"')";
     }
 
-    private String createLoadQuery(int id, int idUser) {
-        return "SELECT * FROM listfilm WHERE id = '"+id+"' AND idUser = '"+idUser+"'";
+    private String createLoadQuery(int id) {
+        return "SELECT * FROM listfilm WHERE id = '"+id+"'";
     }
 
-    private String createDeleteListQuery(int id, int idUser) {
-        return "DELETE FROM listfilm WHERE id = '"+id+"' AND idUser = '"+idUser+"' ";
+    private String createDeleteListQuery(int id) {
+        return "DELETE FROM listfilm WHERE id = '"+id+"'";
     }
 
     private String createDeleteListOnFilmQuery(int idList) {
         return "DELETE FROM listhavefilm WHERE idList = '"+idList+"'";
     }
 
-    private String createChangeTitleQuery(int id, int idUser, String title) {
-        return "UPDATE listfilm SET title='"+title+"' WHERE id='"+id+"' AND idUser = '"+idUser+"'";
+    private String createChangeTitleQuery(int id, String title) {
+        return "UPDATE listfilm SET title='"+title+"' WHERE id='"+id+"'";
     }
 
-    private String createQuery(int id, int idUser, String title) {
-        return "INSERT INTO listfilm (id, idUser, title) VALUES ('"+id+"', '"+idUser+"', '"+title+"')";
+    private String createQuery(String nickname, String title) {
+        return "INSERT INTO listfilm (nickname, title) VALUES ('"+nickname+"', '"+title+"')";
     }
 
     private String findFilmOnListQuery(int idList, int idFilm) {
@@ -107,4 +109,7 @@ public class DatamapperListFilm extends Datamapper<ListFilm>{
     }
 
 
+    private String getFirstListsQuery(String nickname, int limit) {
+        return "SELECT * FROM listfilm WHERE nickname= '" + nickname + "' LIMIT " + limit;
+    }
 }

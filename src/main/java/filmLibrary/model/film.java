@@ -1,7 +1,7 @@
 package filmLibrary.model;
 
 public class Film {
-    private final int id;
+    private int id;
     private final String title;
     private final String synopsis;
     private final int year;
@@ -22,6 +22,7 @@ public class Film {
         this.urlImage = builder.urlImage;
         this.path = builder.path;
     }
+
 
     public int getId() {
         return id;

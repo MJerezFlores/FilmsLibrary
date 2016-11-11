@@ -1,127 +1,81 @@
-import filmLibrary.ModifyListFilms;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import filmLibrary.controllers.FilmController;
+import filmLibrary.controllers.ListsController;
+import filmLibrary.deserializer.ListFilmSerializer;
+import filmLibrary.model.Film;
+import filmLibrary.model.ListFilm;
 import spark.Spark;
 
-import java.lang.reflect.Method;
+import java.util.Map;
 
 import static spark.Spark.*;
 
 public class main {
+
+    private static final FilmController filmController = new FilmController();
+    private static final ListsController listsController = new ListsController();
+
     public static void main(String[] args) {
 
 
         Spark.staticFiles.location("/public");
 
-        get("/filmLibrary.model.Film/:filmID", (req, res) -> { return "{"+
-                "'id': "+ req.params(":filmID")+","+
-                "'title': 'Hypnosis',"+
-                "'synopsis': 'asdasdadasdadasdasdasdasdasdasdasdasd'',"+
-                "'genre': 'Science Fiction'',"+
-                "'year': '1994',"+
-                "'director': 'Sarah',"+
-                "'actor': [{'name': 'Brad Pitt'}{'name': 'Leonardo Dicaprio''}{'name': 'Chris Evans''}],"+
-                "'image': {'largerImage': 'asasasa', 'smallImage': 'asdasdasd''},"+
-                "'path': [{'path': 'path1'}{'path': 'path2''}{'path': 'path3'}]"+
-                "'rating': '9.4',"+
-                "}";});
-
-        delete("/filmLibrary.model.Film/:filmID", (req, res) -> { return "{"+
-                "'id': "+ req.params(":filmID")+","+
-                "'title': 'Hypnosis',"+
-                "'img': 'url',"+
-                "'rating': '8.2'"+
-                "}";});
-
-        post("/filmLibrary.model.Film/add", (req, res) -> "{"+
-                "'id' : 234,"+
-                "'title': 'Hypnosis',"+
-                "'synopsis': 'asdasdadasdadasdasdasdasdasdasdasdasd'',"+
-                "'genre': 'Science Fiction'',"+
-                "'year': '1994',"+
-                "'director': 'Sarah',"+
-                "'actor': [{'name': 'Brad Pitt'}{'name': 'Leonardo Dicaprio''}{'name': 'Chris Evans''}],"+
-                "'image': {'largerImage': 'asasasa', 'smallImage': 'asdasdasd''},"+
-                "'path': [{'path': 'path1'}{'path': 'path2''}{'path': 'path3'}]"+
-                "'rating': '9.4',"+
-                "}");
-
-        post("/filmLibrary.model.Film/:filmID", (req, res) -> { return "{"+
-                "'id': "+ req.params(":filmID")+","+
-                "'title': 'Hypnosis',"+
-                "'synopsis': 'asdasdadasdadasdasdasdasdasdasdasdasd'',"+
-                "'genre': 'Science Fiction'',"+
-                "'year': '1994',"+
-                "'director': 'Sarah',"+
-                "'actor': [{'name': 'Brad Pitt'}{'name': 'Leonardo Dicaprio''}{'name': 'Chris Evans''}],"+
-                "'image': {'largerImage': 'asasasa', 'smallImage': 'asdasdasd''},"+
-                "'path': [{'path': 'path1'}{'path': 'path2''}{'path': 'path3'}]"+
-                "'rating': '9.4',"+
-                "}";});
-
-        get("/list/:listFilmID", (req, res) -> {return "{"+
-                "'id': "+ req.params(":listFilmID")+","+
-                "'title' :'Schedule',"+
-                "'films': [" +
-
-                "{'title': 'Hypnosis'," +
-                "'image': {'largerImage': 'asasasa', 'smallImage': 'asdasdasd''}," +
-                "'rating': '9.4'}" +
-
-                "{title': 'Hypnosis'," +
-                "'image': {'largerImage': 'asasasa', 'smallImage': 'asdasdasd''}," +
-                "'rating': '9.4'}" +
-
-                "{title': 'Hypnosis'," +
-                "'image': {'largerImage': 'asasasa', 'smallImage': 'asdasdasd''}," +
-                "'rating': '9.4'}" +
-
-                "]}";});
-
-        delete("/list/:listFilmID", (req, res) -> {return "{"+
-                "'id': "+ req.params(":listFilmID")+","+
-                "'title' :'Schedule',"+
-                "'films': [" +
-
-                "{'title': 'Hypnosis'," +
-                "'image': {'largerImage': 'asasasa', 'smallImage': 'asdasdasd''}," +
-                "'rating': '9.4'}" +
-
-                "{title': 'Hypnosis'," +
-                "'image': {'largerImage': 'asasasa', 'smallImage': 'asdasdasd''}," +
-                "'rating': '9.4'}" +
-
-                "{title': 'Hypnosis'," +
-                "'image': {'largerImage': 'asasasa', 'smallImage': 'asdasdasd''}," +
-                "'rating': '9.4'}" +
-
-                "]}";});
-
-        post("/list/:listFilmID/:action/:parameter/modify", (req, res) -> {
-            try {
-                ModifyListFilms modifyList = new ModifyListFilms();
-                Method method = modifyList.getClass().getMethod(req.params(":action"), String.class, String.class);
-                return (String) method.invoke(modifyList,req.params(":listFilmID"), req.params(":parameter"));
-            }catch (Exception e){
-                return e.getMessage();
-            }
+        get("/film/:filmID", (req, res) -> {
+            Film film = filmController.getFilm(Integer.parseInt(req.params("filmID")));
+            return new Gson().toJson(film);
         });
 
-        post("/list/create", (req, res) -> "{"+
-                "'title' :'NewList',"+
-                "'films': [" +
+        delete("/film/:filmID", (req, res) -> {
+            return filmController.delete(Integer.parseInt(req.params("filmID")));
+        });
 
-                "{'title': 'Hypnosis'," +
-                "'image': {'largerImage': 'asasasa', 'smallImage': 'asdasdasd''}," +
-                "'rating': '9.4'}" +
+        post("/film/add", (req, res) ->{
+            return filmController.create(new Gson().fromJson(req.body(), Film.class));
+        }  );
 
-                "{title': 'Hypnosis'," +
-                "'image': {'largerImage': 'asasasa', 'smallImage': 'asdasdasd''}," +
-                "'rating': '9.4'}" +
+        post("/film/edit", (req, res) -> {
+            return filmController.modify(new Gson().fromJson(req.body(), Film.class));
+        });
 
-                "{title': 'Hypnosis'," +
-                "'image': {'largerImage': 'asasasa', 'smallImage': 'asdasdasd''}," +
-                "'rating': '9.4'}" +
 
-                "]}");
+        get("/list/:listFilmID", (req, res) -> {
+            return new GsonBuilder()
+                    .registerTypeAdapter(ListFilm.class, new ListFilmSerializer())
+                    .create()
+                    .toJson(listsController.getList(Integer.parseInt(req.params(":listFilmID"))));
+        });
+
+        delete("/list/:listFilmID", (req, res) -> {
+            return listsController.delete(Integer.parseInt(req.params(":listFilmID")));
+        });
+
+        post("/list/:listFilmID/modify", (req, res) -> {
+            Map<String, String> map = new Gson().fromJson(req.body(), Map.class);
+            return listsController.modify(req.params(":listFilmID"), map.get("action"), map.get("parameter"));
+        });
+
+        get("/list/main/:nickname", (req, res) -> {
+            return new GsonBuilder()
+                    .registerTypeAdapter(ListFilm.class, new ListFilmSerializer())
+                    .create()
+                    .toJson(listsController.mainLists(req.params(":nickname")));
+        });
+
+        get("/list/all/:nickname", (req, res) -> {
+            return new GsonBuilder()
+                    .registerTypeAdapter(ListFilm.class, new ListFilmSerializer())
+                    .create()
+                    .toJson(listsController.lists(req.params(":nickname")));
+        });
+
+        post("/list/create", (req, res) -> {
+            ListFilm listFilm = new GsonBuilder()
+                    .registerTypeAdapter(ListFilm.class, new ListFilmSerializer())
+                    .create()
+                    .fromJson(req.body(), ListFilm.class);
+            return listsController.create(listFilm);
+        });
 
         get("/search", (req, res) -> "{"+
                 "'filter': 'rating',"+

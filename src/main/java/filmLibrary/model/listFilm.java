@@ -7,20 +7,26 @@ public class ListFilm extends LinkedList<Film>{
 
     private int id;
     private String title;
+    private final String nickname;
     private List<Film> list = new LinkedList<>();
 
-
-    public ListFilm(int id, String title){
-        this.title = title;
+    public ListFilm(int id, String nickname, String title){
         this.id = id;
+        this.nickname = nickname;
+        this.title = title;
+    }
+
+    public ListFilm(String nickname, String title){
+        this.nickname = nickname;
+        this.title = title;
+    }
+
+    public String getNickname(){
+        return nickname;
     }
 
     public int getId() {
         return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
     }
 
     public String getTitle() {
