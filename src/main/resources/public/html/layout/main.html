@@ -1,0 +1,83 @@
+
+<!--########-->
+<!--CARROUSEL-->
+<!--########-->
+<div class="" >
+    <div id="myCarousel" class="carousel slide" data-ride="carousel">
+        <!-- Indicators -->
+        <ol class="carousel-indicators">
+            <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
+            <li data-target="#myCarousel" data-slide-to="1"></li>
+            <li data-target="#myCarousel" data-slide-to="2"></li>
+            <li data-target="#myCarousel" data-slide-to="3"></li>
+        </ol>
+
+        <!-- Wrapper for slides -->
+        <div id ="carouselPrincipal" class="carousel-inner" role="listbox">
+            <div class="item active">
+                <div class="opaco"></div>
+                <img id="imgLarge" src="../img/batman.jpg" alt="batman">
+                <div class="carousel-caption">
+                    <h3>BATMAN BEGINS</h3>
+                    <p>Batman Begins explores the origins of the Batman legend and the Dark Knight's emergence
+                        as a force for good in Gotham.</p>
+                </div>
+            </div>
+
+            <div class="item">
+                <div class="opaco"></div>
+                <img src="../img/hobbit.jpg" alt="hobbit">
+                <div class="carousel-caption">
+                    <h3>HOBBIT</h3>
+                    <p>The adventure follows the journey of title character Bilbo Baggins, who is swept into an
+                        epic quest to reclaim the lost Dwarf Kingdom of Erebor from the fearsome dragon Smaug.</p>
+                </div>
+            </div>
+
+            <div class="item">
+                <div class="opaco"></div>
+                <img src="../img/xmen.jpg" alt="xmen">
+                <div class="carousel-caption">
+                    <h3>X-MEN DAYS OF FUTURE PAST</h3>
+                    <p>In 1944, in a German concentration camp in occupied Poland, Nazi scientist Dr. Klaus Schmidt witnesses a young
+                        Erik Lehnsherr bend a metal gate with his mind when the child is separated from his mother.</p>
+                </div>
+            </div>
+
+            <div class="item">
+                <div class="opaco"></div>
+                <img src="../img/DareDevil.jpg" alt="daredevil">
+                <div class="carousel-caption">
+                    <h3>DAREDEVIL</h3>
+                    <p>Abandoned by his mother, Matt Murdock was raised by his father, boxer "Battling Jack" Murdock, in Hell's Kitchen.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Left and right controls -->
+        <a class="left carousel-control" href="#myCarousel" role="button" data-slide="prev">
+            <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+            <span class="sr-only">Previous</span>
+        </a>
+        <a class="right carousel-control" href="#myCarousel" role="button" data-slide="next">
+            <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+            <span class="sr-only">Next</span>
+        </a>
+    </div>
+</div>
+
+<div class="lists" >
+    <div ng-repeat="listMain in listMainFilms" ng-hide="!listMain.films.length">
+        <div class="title">
+            <h2>{{listMain.title}}</h2>
+        </div>
+
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    <carousel-multiple-element id="listMain.id" elements="listMain.films"></carousel-multiple-element>
+                </div>
+            </div>
+        </div>
+    </div>>
+</div>

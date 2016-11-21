@@ -1,0 +1,70 @@
+<head>
+    <link rel="stylesheet" type="text/css" href="../css/login.css">
+</head>
+<div ng-controller="RegisterController">
+<form name="userForm" ng-submit="addUser()">
+    <div class="group">
+        <input type="text" ng-model="user.nickname"><span class="highlight"></span><span class="bar"></span>
+        <label>Nickname</label>
+    </div>
+    <div ng-messages="userForm.nickname.$error">
+        <div ng-message="required"></div>
+    </div>
+    <div class="group">
+        <input name="email" ng-model="user.email" type="text" required ng-pattern="/^.+@.+\..+$/" />
+        <span class="highlight"></span><span class="bar"></span>
+        <label>Email</label>
+    </div>
+    <div ng-messages="email.nickname.$error">
+        <div ng-message="required"></div>
+        <div ng-message="email">Your email address is invalid</div>
+    </div>
+    <div class="group">
+        <input type="password" ng-model="user.pass"><span class="highlight"></span><span class="bar"></span>
+        <label>Password</label>
+    </div>
+    <div ng-messages="userForm.pass.$error">
+        <div ng-message="required"></div>
+    </div>
+    <button type="submit" class="button buttonBlue">Register
+        <div class="ripples buttonRipples"><span class="ripplesCircle"></span></div>
+    </button>
+</form>
+
+</div>
+
+<script>
+    $(window, document, undefined).ready(function() {
+        $('input').blur(function() {
+            var $this = $(this);
+            if ($this.val())
+                $this.addClass('used');
+            else
+                $this.removeClass('used');
+        });
+
+        var $ripples = $('.ripples');
+
+        $ripples.on('click.Ripples', function(e) {
+
+            var $this = $(this);
+            var $offset = $this.parent().offset();
+            var $circle = $this.find('.ripplesCircle');
+
+            var x = e.pageX - $offset.left;
+            var y = e.pageY - $offset.top;
+
+            $circle.css({
+                top: y + 'px',
+                left: x + 'px'
+            });
+
+            $this.addClass('is-active');
+
+        });
+
+    });
+
+</script>
+
+</body>

@@ -13,6 +13,10 @@ public class DatamapperListFilm extends Datamapper<ListFilm>{
         return load(createLoadQuery(id));
     }
 
+    public List<ListFilm> getMainLists(String nickname, int limit) {
+        return multipleLoad(getFirstListsQuery(nickname, limit));
+    }
+
     public void deleteListFilm(int id) {
         update(createDeleteListOnFilmQuery(id));
         update(createDeleteListQuery(id));
@@ -32,23 +36,38 @@ public class DatamapperListFilm extends Datamapper<ListFilm>{
         }
     }
 
-    public List<ListFilm> getMainLists(String nickname, int limit) {
-        return multipleLoad(getFirstListsQuery(nickname, limit));
-    }
 
     public void deleteFilmInList(int idList, int idFilm){
         update(createDeleteFilmQuery(idList, idFilm));
     }
 
     @Override
-    protected ListFilm mapElement(ResultSet rs) {
+    protected ListFilm mapElementSimple(ResultSet rs) {
         try {
-            ListFilm listFilm = new ListFilm(rs.getInt("id"), rs.getString("nickname"), rs.getString("title"));
-            List idFilms = loadIdFilmsOnList(rs.getInt("id"));
-            for (Object id: idFilms) {
-                listFilm.add(new DatamapperFilm().getFilm((Integer) id));
+            while(rs.next()){
+                ListFilm listFilm = new ListFilm(rs.getInt("id"), rs.getString("nickname"), rs.getString("title"));
+                List idFilms = loadIdFilmsOnList(rs.getInt("id"));
+                for (Object id: idFilms) {
+                    listFilm.add(new DatamapperFilm().getFilm((Integer) id));
+                }
+                return listFilm;
             }
-            return listFilm;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    @Override
+    protected ListFilm mapElementExtraLoop(ResultSet rs) {
+        try {
+                ListFilm listFilm = new ListFilm(rs.getInt("id"), rs.getString("nickname"), rs.getString("title"));
+                List idFilms = loadIdFilmsOnList(rs.getInt("id"));
+                for (Object id: idFilms) {
+                    listFilm.add(new DatamapperFilm().getFilm((Integer) id));
+                }
+                return listFilm;
+
         } catch (SQLException e) {
             e.printStackTrace();
         }

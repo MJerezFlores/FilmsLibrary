@@ -1,0 +1,9 @@
+<div id="allFilms" ng-controller="filmsController" ng-repeat="film in films">
+        <div class="thumbwrap col-xs-12 col-sm-4 col-md-2"><a class="thumb" href="/filmpage/{{film.id}}"><img data-toggle="tooltip" title="{{film.synopsis}}" ng-src="{{film.urlImage}}" alt="Image" class="img-responsive">
+            <div class="titleFilm">
+                <p>{{film.title}}</p>
+            </div>
+        </a></div>
+</div>
+
+

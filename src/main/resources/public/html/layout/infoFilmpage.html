@@ -1,0 +1,196 @@
+
+
+<!--########-->
+<!--INFO FILM-->
+<!--########-->
+
+    <div ng-controller="filmpageController" class="title-info">
+        <ul class="titleRight">
+            <li><h2>{{film.title}}</h2></li>
+        </ul>
+        <ul class="titleLeft">
+            <li>
+                <div class="dropdown">
+                    <button onclick="myFunction()" class="dropbtn">Add to List</button>
+                    <div ng-controller="listspageController" id="myDropdown" class="dropdown-content" >
+                    <div ng-repeat="list in listFilms">
+                        <a href="" ng-controller="listModifyController" ng-click="addFilmInList(list.id, 'addFilm')">{{list.title}}</a>
+                    </div>
+                        <a href=#><span class="glyphicon glyphicon-plus" data-toggle="modal" data-target="#addListModal"></span></a>
+                    </div>
+                </div>
+            </li>
+            <li><button class="editButtonInfo"><span class="glyphicon glyphicon-edit glyphyInfo" aria-hidden="true" data-toggle="modal" data-target="#myModalEdit"></span></button></li>
+            <li><button ng-controller="filmpageController" class="deleteButtonInfo" ng-click="deleteFilm(film.id)"><span class="glyphicon glyphicon-trash glyphyInfo" aria-hidden="true"></span></button></li>
+        </ul>
+    </div>
+<div class="row">
+<div class="filmImageData">
+    <div class="filmImage">
+        <div class="imageFilm"> <img ng-src="{{film.urlImage}}" alt="Image" class="img-responsive"> </div>
+        <div class="yearRating">
+            <h3>Year</h3>  <p> {{film.year}} </p>
+            <h3>Rating</h3>  <p>{{film.rating}}</p>
+        </div>
+    </div>
+    <div class="filmData">
+        <h3>Sypnosis</h3>
+        <p>{{film.synopsis}}</p>
+        <h3>Director</h3>
+        <p>{{film.director}}</p>
+        <h3>Actors</h3>
+        <p>{{film.actors}}</p>
+        <h3>Genre</h3>
+        <p>{{film.genre}}</p>
+        <h3>Watch the movie</h3>
+        <p><a href=#><span data-path-film="{{film.path}}" class="glyphicon glyphicon-facetime-video" data-toggle="modal" data-target="#iframeModal"></span></a></p>
+
+        <!--<iframe src="file:///\\MACA-PORTATIL\Anime\Boku No Hero Academy\01.mp4" frameborder="0"></iframe>-->
+
+        <h1>HTML5 local video file player example</h1>
+        <div id="message"></div>
+        <input type="file" accept="video/*" ng-click="playSelectedFile()"/>
+        <video controls autoplay></video>
+
+        <script>
+        </script>
+
+
+        <a href="file:////MACA-PORTATIL/Anime/Boku%20No%20Hero%20Academy/01.mp4" onclick="window.open('file:////MACA-PORTATIL/Anime/Boku%20No%20Hero%20Academy/01.mp4')">CLICK ME</a>
+        <video width="400" controls="">
+            <source src= "file:///MACA-PORTATIL/Anime/Boku%20No%20Hero%20Academy/01.mp4" type="video/mp4">
+            Your browser does not support HTML5 video.
+        </video>
+
+    </div>
+</div>
+</div>
+
+
+<!--########-->
+<!--/<videoILM-->
+<!--########-->
+
+<!--########-->
+<!--IFRAME MODAL-->
+<!--########-->
+<div class="modal modal fade " id="iframeModal" role="dialog">
+    <button type="button" class="close" data-dismiss="modal">&times;</button>
+    <iframe id="pathFilm" src=""></iframe>
+
+</div>
+<script>
+    $('#iframeModal').on('show.bs.modal', function(e) {
+        var pathFilm= $(e.relatedTarget).data('path-film');
+        $("#pathFilm").attr("src", pathFilm);
+    });
+</script>
+<!--########-->
+<!--//IFRAME MODAL-->
+<!--########-->
+<!--########-->
+
+
+
+<!--MODAL EDIT FILM-->
+<!--########-->
+
+<div ng-controller="editFilmController" class="modal fade" id="myModalEdit" role="dialog">
+    <form name="myForm" ng-submit="editFilm()">
+    <div class="modal-dialog">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">EDIT FILM</h4>
+            </div>
+            <div class="form-group row">
+                <label class="col-xs-2 col-form-label">Title</label>
+                <div class="col-xs-9">
+                    <input ng-model="film.title" class="form-control" required >
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-xs-2 col-form-label">Synopsis</label>
+                <div class="col-xs-9">
+                    <input ng-model="film.synopsis" class="form-control">
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-xs-2 col-form-label">Genre</label>
+                <div class="col-xs-9">
+                    <input ng-model="film.genre"  class="form-control">
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-xs-2 col-form-label">Year</label>
+                <div class="col-xs-9">
+                    <input ng-model="film.year" class="form-control">
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-xs-2 col-form-label">Director</label>
+                <div class="col-xs-9">
+                    <input ng-model="film.director" class="form-control">
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-xs-2 col-form-label">Actors</label>
+                <div class="col-xs-9">
+                    <input ng-model="film.actors" class="form-control">
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-xs-2 col-form-label">Image</label>
+                <div class="col-xs-9">
+                    <input ng-model="film.urlImage" class="form-control">
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-xs-2 col-form-label">Rating</label>
+                <div class="col-xs-9">
+                    <input ng-model="film.rating" class="form-control">
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-xs-2 col-form-label">Path</label>
+                <div class="col-xs-9">
+                    <input ng-model="film.path" class="form-control">
+                </div>
+            </div>
+
+
+            <div class="modal-footer">
+                <button type="submit" class="btn btn-default" >Save</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+            </div>
+
+        </div>
+    </div>
+    </form>
+</div>
+
+<div ng-controller="addListController" class="modal fade" id="addListModal" role="dialog">
+    <form name="myForm" ng-submit="addList()">
+        <div class="modal-dialog">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">ADD LIST</h4>
+                </div>
+                <div class="form-group row">
+                    <label class="col-xs-2 col-form-label">Title</label>
+                    <div class="col-xs-9">
+                        <input ng-model="list.title" class="form-control" required>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-default">Save</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                </div>
+
+            </div>
+        </div>
+    </form>
+</div>

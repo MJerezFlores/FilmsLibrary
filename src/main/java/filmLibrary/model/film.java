@@ -10,6 +10,7 @@ public class Film {
     private final float rating;
     private final String urlImage;
     private final String path;
+    private final String genre;
 
     private Film(Builder builder){
         this.id = builder.id;
@@ -21,6 +22,7 @@ public class Film {
         this.rating = builder.rating;
         this.urlImage = builder.urlImage;
         this.path = builder.path;
+        this.genre = builder.genre;
     }
 
 
@@ -60,6 +62,10 @@ public class Film {
         return path;
     }
 
+    public String getGenre() {
+        return genre;
+    }
+
     public static class Builder {
         private final String title;
         private final int id;
@@ -70,6 +76,7 @@ public class Film {
         private float rating;
         private String urlImage;
         private String path;
+        private String genre;
 
         public Builder(int id, String title){
             this.id = id;
@@ -108,6 +115,11 @@ public class Film {
 
         public Builder urlImage (String urlImage) {
             this.urlImage = urlImage;
+            return this;
+        }
+
+        public Builder genre (String genre) {
+            this.genre = genre;
             return this;
         }
 

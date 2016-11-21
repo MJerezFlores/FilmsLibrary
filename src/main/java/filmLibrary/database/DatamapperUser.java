@@ -7,25 +7,18 @@ import java.sql.SQLException;
 
 public class DatamapperUser extends Datamapper<User>{
 
-    public User getUser(int id){
-        return load(createLoadQuery(id));
+    public User existUser(String nickname, String pass){
+        return load(createLoadQuery(nickname, pass));
     }
 
-    public void deleteUser(int id) {
-        update(createDeleteQuery(id));
-    }
-
-    public void updateUser(int id, String nickname, String email, String password){
-        update(createChangeTitleQuery(id, nickname, email, password));
-    }
-
-    public void createUser(int id, String nickname, String email, String password){
-        update(createUserQuery(id, nickname, email, password));
+    public void createUser(User user){
+        if(existUser(user.getNickname(), user.getPass()) == null)
+            update(createUserQuery(user.getNickname(),user.getEmail(),user.getPass()));
     }
 
 
     @Override
-    protected User mapElement(ResultSet rs) {
+    protected User mapElementSimple(ResultSet rs) {
         try {
             while(rs.next()){
                 return new User(rs.getString("nickname"), rs.getString("email"), rs.getString("password"));
@@ -36,19 +29,28 @@ public class DatamapperUser extends Datamapper<User>{
         return null;
     }
 
-    private String createUserQuery(int id, String nickname, String email, String password) {
-        return "INSERT INTO user (id, nickname, email, password) VALUES ('"+id+"', '"+nickname+"', '"+email+"', '"+password+"')";
+    @Override
+    protected User mapElementExtraLoop(ResultSet rs) {
+        try {
+            while(rs.next()){
+                return new User(rs.getString("nickname"), rs.getString("email"), rs.getString("password"));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
-    private String createLoadQuery(int id) {
-        return "SELECT * FROM user WHERE id = '"+id+"'";
+    private String createUserQuery(String nickname, String email, String password) {
+        return "INSERT INTO user (nickname, email, password) VALUES ('"+nickname+"', '"+email+"', '"+password+"')";
     }
 
-    private String createDeleteQuery(int id) {
-        return "DELETE FROM user WHERE id = '"+id+"' ";
+    private String createLoadQuery(String nickname, String pass) {
+        return "(SELECT * FROM user WHERE nickname = '"+nickname+"' AND password = '"+pass+"')";
     }
 
-    private String createChangeTitleQuery(int id, String nickname, String email, String password) {
-        return "UPDATE user SET nickname='"+nickname+"', email='"+email+"', password='"+password+"' WHERE id='"+id+"'";
+    private String createDeleteQuery(String nickname, String pass) {
+        return "(DELETE FROM user WHERE nickname = '"+nickname+"', password = '"+pass+"')";
     }
+
 }

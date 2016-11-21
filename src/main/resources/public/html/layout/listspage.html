@@ -1,0 +1,25 @@
+
+<!--########-->
+<!--CARTELERA-->
+<!--########-->
+<div class="lists" >
+    <div ng-repeat="list in listFilms">
+        <div class="title">
+            <ul id="listOptions">
+                <li><h2>{{list.title}}</h2></li>
+                <li><button ng-controller="listController" ng-click="deleteList(list.id)" class="dropbtn">Delete List</button></li>
+            </ul>
+        </div>
+
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    <carousel-multiple-element id="list.id" elements="list.films"></carousel-multiple-element>
+                </div>
+            </div>
+        </div>
+    </div>>
+</div>
+<!--########-->
+<!--//CARTELERA-->
+<!--########-->

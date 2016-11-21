@@ -1,6 +1,9 @@
 package filmLibrary.controllers;
+
 import filmLibrary.database.DatamapperFilm;
 import filmLibrary.model.Film;
+
+import java.util.List;
 
 public class FilmController {
 
@@ -41,5 +44,19 @@ public class FilmController {
     public Film getFilm(int filmID){
         return datamapperFilm.getFilm(filmID);
     }
+
+    public List<Film> getFilms() {
+        return datamapperFilm.getFilms();
+    }
+
+    public List<String> getCategories() {
+        return datamapperFilm.getCategories();
+    }
+
+
+    public List<Film> getSearchCategories(String filter) {
+        return datamapperFilm.getFilms(filter);
+    }
+
 
 }
