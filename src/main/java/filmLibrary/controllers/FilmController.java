@@ -2,6 +2,7 @@ package filmLibrary.controllers;
 
 import filmLibrary.database.DatamapperFilm;
 import filmLibrary.model.Film;
+import filmLibrary.model.Search;
 
 import java.util.List;
 
@@ -59,4 +60,7 @@ public class FilmController {
     }
 
 
+    public List<Film> searchFilms(Search search) {
+        return datamapperFilm.search(search);
+    }
 }

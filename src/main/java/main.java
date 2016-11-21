@@ -5,6 +5,7 @@ import filmLibrary.controllers.ListsController;
 import filmLibrary.controllers.UserController;
 import filmLibrary.deserializer.ListFilmSerializer;
 import filmLibrary.model.Film;
+import filmLibrary.model.FilmSearch;
 import filmLibrary.model.ListFilm;
 import filmLibrary.model.User;
 import org.apache.commons.io.FileUtils;
@@ -109,10 +110,11 @@ public class main {
             return new Gson().toJson(filmController.getSearchCategories(req.params(":filter")));
        });
 
-//        get("/api/search", (req, res) -> {
-//            Map<String, String> map = new Gson().fromJson(req.body(), Map.class);
-//            return filmController.searchFilms(map.get("category"), map.get("filter"), map.get("text"));
-//        });
+        post("/api/search", (req, res) -> {
+            Gson gson = new Gson();
+            FilmSearch search = gson.fromJson(req.body(), FilmSearch.class);
+            return gson.toJsonTree(filmController.searchFilms(search), ListFilm.class);
+        });
 
 //
 //                "{"+

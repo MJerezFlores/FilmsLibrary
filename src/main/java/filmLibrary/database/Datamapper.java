@@ -1,5 +1,7 @@
 package filmLibrary.database;
-import java.sql.*;
+import filmLibrary.model.Search;
+
+import java.sql.ResultSet;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -73,4 +75,8 @@ public abstract class Datamapper<T> {
 
     protected abstract T mapElementSimple(ResultSet resultSet);
     protected abstract T mapElementExtraLoop(ResultSet resultSet);
+
+    public List<T> search(Search search){
+        return multipleLoad("SELECT * FROM film WHERE " + search.getDataBaseExpression());
+    };
 }
