@@ -79,4 +79,8 @@ public abstract class Datamapper<T> {
     public List<T> search(Search search){
         return multipleLoad("SELECT * FROM film WHERE " + search.getDataBaseExpression());
     };
+
+
+
+
 }

@@ -49,7 +49,7 @@ angular.module('myApp', ["ngRoute", "ngResource", "ngCookies", "ngMessages"])
     return $resource('/api/film/add')
 
 }).factory('ListAdd', function($resource) {
-    return $resource('/api/list/create');
+    return $resource('/api/list/create')
 
 }).factory('FilmEdit', function($resource) {
     return $resource('/api/film/edit', {}, {
@@ -58,54 +58,52 @@ angular.module('myApp', ["ngRoute", "ngResource", "ngCookies", "ngMessages"])
 }).factory("Films", function ($resource) {
     return $resource('/api/film/all');
 
-}).factory("Genre", function ($resource) {
+}).factory("Categories", function ($resource) {
     return $resource('/api/search/categories');
 
 }).factory("ListModify", function ($resource) {
     return $resource('/api/list/:id/modify', {"id": "id"}, {
         create: {method: 'POST'}
     });
+}).factory("Genre", function($resource){
+    return $resource('/api/search/genre/:genre');
 
+}).factory("Title", function($resource){
+    return $resource('/api/search/title/:title');
 
-}).factory("auth", function($cookies,$cookieStore,$location)
-{
-    return{
-        login : function(username, password)
-        {
+}).factory("Order", function($resource){
+    return $resource('/api/search/order/:order');
+
+}).factory("auth", function($cookies,$cookieStore,$location) {
+    return {
+        login: function (username, password) {
             $cookies.username = username,
                 $cookies.password = password;
             //mandamos a la home
             $location.path("/homepage");
         },
-        logout : function()
-        {
+        logout: function () {
             //al hacer logout eliminamos la cookie con $cookieStore.remove
             $cookieStore.remove("username"),
                 $cookieStore.remove("password");
             //mandamos al login
             $location.path("/");
         },
-        checkStatus : function()
-        {
+        checkStatus: function () {
             //creamos un array con las rutas que queremos controlar
-            var rutasPrivadas = ["/homepage","/filmspage","/infoFilmpage","/listspage"];
-            if(this.in_array($location.path(),rutasPrivadas) && typeof($cookies.username) == "undefined")
-            {
+            var rutasPrivadas = ["/homepage", "/filmspage", "/infoFilmpage", "/listspage"];
+            if (this.in_array($location.path(), rutasPrivadas) && typeof($cookies.username) == "undefined") {
                 $location.path("/");
             }
             //en el caso de que intente acceder al login y ya haya iniciado sesión lo mandamos a la home
-            if(this.in_array("/login",rutasPrivadas) && typeof($cookies.username) != "undefined")
-            {
+            if (this.in_array("/login", rutasPrivadas) && typeof($cookies.username) != "undefined") {
                 $location.path("/homepage");
             }
         },
-        in_array : function(needle, haystack)
-        {
+        in_array: function (needle, haystack) {
             var key = '';
-            for(key in haystack)
-            {
-                if(haystack[key] == needle)
-                {
+            for (key in haystack) {
+                if (haystack[key] == needle) {
                     return true;
                 }
             }
@@ -118,57 +116,56 @@ angular.module('myApp', ["ngRoute", "ngResource", "ngCookies", "ngMessages"])
 }).controller('homepageController', ["$scope", "MainListFilm", "$cookies", function ($scope, MainListFilm, $cookies) {
     $scope.listMainFilms = MainListFilm.query({ nickname: $cookies.username})
 
-}]).controller('listModifyController', ["$scope", "ListModify","sharedData", "$window", function ($scope, ListModify, sharedData, $window) {
+}]).controller('listModifyController', ["$scope", "ListModify","sharedData", "$location", function ($scope, ListModify, sharedData, $location) {
     $scope.listModify = new ListModify();
 
     $scope.addFilmInList = function(id, action){
         $scope.listModify.action = action;
         $scope.listModify.parameter = sharedData.getData('filmID');
         $scope.listModify.$create({id: id})
-        $window.location.reload();
+        $location.path("/filmspage");
     }
-}]).controller('filmpageController', ["$scope", "$routeParams", "Film", "sharedData", "$window", function ($scope,$routeParams,
-                                                                                                           Film, sharedData, $window) {
+}]).controller('filmpageController', ["$scope", "$routeParams", "Film", "sharedData", "$route", function ($scope,$routeParams,
+                                                                                                           Film, sharedData, $route) {
     $scope.film = Film.query({ id: $routeParams.filmID });
     sharedData.setData('filmID', $routeParams.filmID);
 
     $scope.deleteFilm =  function() {
         Film.delete({ id: $routeParams.filmID})
-        $window.location.reload();
+        $route.reload();
     }
-}]).controller('listController', ["$scope", "List", "$window", function ($scope, List, $window) {
+}]).controller('listController', ["$scope", "List", "$route", function ($scope, List, $route) {
 
     $scope.deleteList =  function(id) {
-        console.log(id);
         List.delete({ id: id})
-        $window.location.reload();
+        $route.reload();
     }
 
 }]).controller('listspageController', ["$scope", "ListFilm","$cookies", function ($scope, ListFilm, $cookies) {
     $scope.listFilms = ListFilm.query({ nickname: $cookies.username})
 
-}]).controller('addFilmController', ["$scope", "FilmAdd", "$window",  function($scope, FilmAdd, $window) {
+}]).controller('addFilmController', ["$scope", "FilmAdd", "$route",  function($scope, FilmAdd, $route) {
             $scope.film = new FilmAdd();
             $scope.addFilm = function() {
                 $scope.film.$save(function(){
                 });
-                $window.location.reload();
+                $route.reload();
     };
-}]).controller('addListController', ["$scope", "ListAdd", "$window", "$cookies" , function($scope, ListAdd, $window, $cookies) {
+}]).controller('addListController', ["$scope", "ListAdd", "$route", "$cookies" , function($scope, ListAdd, $route, $cookies) {
     $scope.list = new ListAdd();
     $scope.addList = function() {
         $scope.list.nickname = $cookies.username;
         $scope.list.$save(function(){
-            $window.location.reload();
+            $route.reload();
         });
     };
-}]).controller('editFilmController', ["$scope", "FilmEdit", "$window",   function($scope, FilmEdit, $window) {
+}]).controller('editFilmController', ["$scope", "FilmEdit", "$route",   function($scope, FilmEdit, $route) {
     $scope.instanceFilmEdit = new FilmEdit();
     $scope.editFilm = function() { //create a new movie. Issues a POST to /api/movies
         angular.copy($scope.film, $scope.instanceFilmEdit);
         $scope.instanceFilmEdit.$update(function(){
         });
-        $window.location.reload();
+        $route.reload();
     };
 }]).controller('filmsController', ["$scope", "Films", function($scope, Films) {
     $scope.films = Films.query();
@@ -180,17 +177,17 @@ angular.module('myApp', ["ngRoute", "ngResource", "ngCookies", "ngMessages"])
         console.log('Rating selected: ' + rating);
     };
 
-}).controller('genreController', ["Genre", "$scope", function(Genre, $scope) {
-    $scope.genres = Genre.query();
+}).controller('genreController', ["Categories", "$scope", "Genre", function(Categories, $scope, Genre ) {
+    $scope.genres = Categories.query();
 
 }]).controller('RegisterController', ["UserAdd", "$scope", "$location", function(UserAdd, $scope, $location) {
     $scope.user = new UserAdd();
     $scope.addUser = function () {
         $scope.user.$save(function () {
-            $location.path("/");
         });
+        $location.path("/");
     }
-}]).controller('LoginController', ["User", "$scope", "$window", "auth", "$location", function(User, $scope, $window, auth, $location){
+}]).controller('LoginController', ["User", "$scope", "auth", "$location", function(User, $scope, auth, $location){
     $scope.loginUser = function(){
         $scope.userLogged = User.query({nickname:$scope.user.nickname, pass:$scope.user.pass});
         $scope.userLogged.$promise.then(function(data) {
@@ -201,6 +198,27 @@ angular.module('myApp', ["ngRoute", "ngResource", "ngCookies", "ngMessages"])
             }
         });
     }
+
+}]).controller('searchGenreController', ["Genre", "$routeParams","$scope", function(Genre, $routeParams, $scope){
+    $scope.films = Genre.query({ genre: $routeParams.genre })
+
+}]).controller('searchOrderController', ["Order", "$routeParams","$scope", function(Order, $routeParams, $scope){
+    $scope.films = Order.query({ order: $routeParams.order })
+
+}]).controller('searchTextController', ["Title","$scope","sharedData","$location","$route", function(Title, $scope, sharedData, $location, $route){
+    $scope.addSearch = function(){
+        $scope.films = Title.query({title: $scope.search.title});
+        console.log($scope.films)
+        sharedData.setData('searchFilms', $scope.films);
+        $location.path("/search");
+        $route.reload();
+    }
+}]).controller('searchTitleController', ["$scope","sharedData", function($scope, sharedData, $location){
+    $scope.films = sharedData.getData('searchFilms');
+
+}]).controller('profileController', ["$scope", "$cookies", function($scope, $cookies){
+    $scope.nickname = $cookies.username;
+
     //////////////////SERVICE//////////////
 }]).service('sharedData', function () {
     var property = {};
@@ -285,6 +303,18 @@ angular.module('myApp', ["ngRoute", "ngResource", "ngCookies", "ngMessages"])
         }).when("/filmspage", {
             controller: "filmsController",
             templateUrl: "/html/layout/filmsPage.html"
+        }).when("/search/genre/:genre", {
+            controller: "searchGenreController",
+            templateUrl: "/html/layout/searchGenre.html"
+        }).when("/search/order/:order", {
+            controller: "searchOrderController",
+            templateUrl: "/html/layout/searchOrder.html"
+        }).when("/search", {
+            controller: "searchTitleController",
+            templateUrl: "/html/layout/search.html"
+        }).when("/profile", {
+            controller: "profileController",
+            templateUrl: "/html/layout/profile.html"
         }).otherwise({
             redirectTo:'/'
         })

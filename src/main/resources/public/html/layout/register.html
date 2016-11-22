@@ -4,15 +4,14 @@
 <div ng-controller="RegisterController">
 <form name="userForm" ng-submit="addUser()">
     <div class="group">
-        <input type="text" ng-model="user.nickname"><span class="highlight"></span><span class="bar"></span>
+        <input type="text" ng-model="user.nickname" required><span class="highlight" ></span><span class="bar"></span>
         <label>Nickname</label>
     </div>
     <div ng-messages="userForm.nickname.$error">
         <div ng-message="required"></div>
     </div>
     <div class="group">
-        <input name="email" ng-model="user.email" type="text" required ng-pattern="/^.+@.+\..+$/" />
-        <span class="highlight"></span><span class="bar"></span>
+        <input type="email" name="email" ng-model="user.email" required><span class="highlight"></span><span class="bar"></span>
         <label>Email</label>
     </div>
     <div ng-messages="email.nickname.$error">
@@ -20,7 +19,7 @@
         <div ng-message="email">Your email address is invalid</div>
     </div>
     <div class="group">
-        <input type="password" ng-model="user.pass"><span class="highlight"></span><span class="bar"></span>
+        <input type="password" ng-model="user.pass" required><span class="highlight" ></span><span class="bar"></span>
         <label>Password</label>
     </div>
     <div ng-messages="userForm.pass.$error">

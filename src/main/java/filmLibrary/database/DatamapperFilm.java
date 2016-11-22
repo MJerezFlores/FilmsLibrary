@@ -30,6 +30,18 @@ public class DatamapperFilm extends Datamapper<Film> {
                 film.getActors(), film.getRating(), film.getPath(), film.getUrlImage(), film.getGenre()));
     }
 
+    public List<Film> searchByGenre(String genre) {
+        return multipleLoad(searchGenreQuery(genre));
+    }
+
+    public List<Film> searchByTitle(String title) {
+        return multipleLoad(searchTitleQuery(title));
+    }
+
+    public List<Film> searchByOrder(String order) {
+        return multipleLoad(searchOrderQuery(order));
+    }
+
     @Override
     protected Film mapElementSimple(ResultSet rs) {
         try {
@@ -120,6 +132,19 @@ public class DatamapperFilm extends Datamapper<Film> {
 
     private String createLoadGenreQuery(String genre) {
         return "SELECT * FROM film WHERE genre = '"+genre+"'";
+    }
+
+
+    private String searchGenreQuery(String genre) {
+        return "SELECT * FROM film WHERE genre = '"+genre+"'";
+    }
+
+    private String searchTitleQuery(String title) {
+        return "SELECT * FROM film WHERE title LIKE '%"+title+"%'";
+    }
+
+    private String searchOrderQuery(String order) {
+        return "SELECT * FROM film ORDER BY "+order+"";
     }
 }
 

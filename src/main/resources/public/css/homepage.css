@@ -10,6 +10,17 @@ body{background-color: black;}
 }
 
 .opaco {
+     position:absolute;
+     top:0px;
+     left:0px;
+     width:160px;
+     height:225px;
+     background-color: black;
+     opacity: 0.5;
+     border:2px solid red;
+ }
+
+.opacoLarge{
     position:absolute;
     top:0px;
     left:0px;
@@ -19,6 +30,7 @@ body{background-color: black;}
     opacity: 0.5;
     border:2px solid red;
 }
+
 .thumbwrap{
     margin-bottom: 3%;
 }
@@ -33,7 +45,6 @@ body{background-color: black;}
     position:absolute;
     z-index:1;
     margin-left:5%;
-    margin-top:120%;
 }
 
 
@@ -434,3 +445,27 @@ iframe{
     align:center;
 }
 
+.profile{
+    border: red;
+    height: 400px;
+    width: 500px ;
+    background-color: pink;
+    margin-left: 30%;
+    margin-top: 10%;
+}
+
+.profileImage{
+    float:left;
+    margin-left: 10%;
+    margin-top:5%;
+}
+
+.profileImage img{
+    height:100px;
+    width: 100px;
+}
+
+.profileData{
+    float:left;
+    margin-left: 10%;
+}

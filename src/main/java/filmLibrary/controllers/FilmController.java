@@ -63,4 +63,16 @@ public class FilmController {
     public List<Film> searchFilms(Search search) {
         return datamapperFilm.search(search);
     }
+
+    public List<Film> getFilmsGenre(String genre) {
+        return datamapperFilm.searchByGenre(genre);
+    }
+
+    public List<Film> getFilmsTitle(String title) {
+        return datamapperFilm.searchByTitle(title);
+    }
+
+    public List<Film> getFilmsOrder(String order) {
+        return datamapperFilm.searchByOrder(order);
+    }
 }

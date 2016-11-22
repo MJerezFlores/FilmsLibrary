@@ -5,7 +5,6 @@ import filmLibrary.controllers.ListsController;
 import filmLibrary.controllers.UserController;
 import filmLibrary.deserializer.ListFilmSerializer;
 import filmLibrary.model.Film;
-import filmLibrary.model.FilmSearch;
 import filmLibrary.model.ListFilm;
 import filmLibrary.model.User;
 import org.apache.commons.io.FileUtils;
@@ -24,8 +23,11 @@ public class main {
 
     public static void main(String[] args) {
 
+        String projectDir = System.getProperty("user.dir");
+        String staticDir = "/src/main/resources/public";
+        Spark.staticFiles.externalLocation(projectDir + staticDir);
 
-        Spark.staticFiles.location("/public");
+//        Spark.staticFiles.location("/public");
 
 
         get("api/user/:nickname/:pass", (req, res)-> {
@@ -78,6 +80,7 @@ public class main {
             return listsController.modify(req.params(":listFilmID"), map.get("action"), map.get("parameter"));
         });
 
+
         get("/api/list/main/:nickname", (req, res) -> {
             return new GsonBuilder()
                     .registerTypeAdapter(ListFilm.class, new ListFilmSerializer())
@@ -106,34 +109,34 @@ public class main {
         });
 
 
-       get("/api/search/categories/:filter", (req, res) -> {
-            return new Gson().toJson(filmController.getSearchCategories(req.params(":filter")));
-       });
-
-        post("/api/search", (req, res) -> {
-            Gson gson = new Gson();
-            FilmSearch search = gson.fromJson(req.body(), FilmSearch.class);
-            return gson.toJsonTree(filmController.searchFilms(search), ListFilm.class);
+        get("/api/search/genre/:genre", (req, res) -> {
+            return new Gson().toJson(filmController.getFilmsGenre(req.params(":genre")));
         });
 
+        get("/api/search/title/:title", (req, res) -> {
+            return new Gson().toJson(filmController.getFilmsTitle(req.params(":title")));
+        });
+
+        get("/api/search/order/:order", (req, res) -> {
+            return new Gson().toJson(filmController.getFilmsOrder(req.params(":order")));
+        });
+
+
+//        get("/api/search/:genre/:title/:order", (req, res) -> {
+//            Gson gson = new Gson();
+//            Map<String, String[]> map = req.queryMap()
+//                    .get("genre", req.params("genre"))
+//                    .get("title", req.params("title"))
+//                    .get("order", req.params("order"))
+//                    .toMap();
 //
-//                "{"+
-//                    "'filter': 'rating',"+
-//                    "'category': 'action',"+
-//                    "'text': 'Dirty',"+
-//                    "}"
+//
+//            FilmSearch search = gson.fromJson(req.body(), FilmSearch.class);
+//            return gson.toJsonTree(filmController.searchFilms(search), ListFilm.class);
+//        });
 
-
-
-
-        get("/api/search/filters", (req, res) -> "{"+
-                "'filters': " + "[" +
-                "{'filter': 'rating'}" +
-                "{'filter': 'year''}]',"+
-                "}");
 
         get("/*", (req, res)->  FileUtils.readFileToString(new File("./src/main/resources/public/html/frame.html"), "UTF-8"));
-
 
 
     }
