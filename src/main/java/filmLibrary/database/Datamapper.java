@@ -35,6 +35,7 @@ public abstract class Datamapper<T> {
         return null;
     }
 
+
     protected void update(String query) {
         try {
             database.update(query);
@@ -79,8 +80,6 @@ public abstract class Datamapper<T> {
     public List<T> search(Search search){
         return multipleLoad("SELECT * FROM film WHERE " + search.getDataBaseExpression());
     };
-
-
 
 
 }

@@ -5,19 +5,21 @@ body{background-color: black;}
 /******************/
 
 #carouselPrincipal .item img{
-    min-height:350px;
     width: 100%;
 }
-
+#carouselPrincipal p{
+    color:white;
+}
 .opaco {
      position:absolute;
      top:0px;
      left:0px;
-     width:160px;
-     height:225px;
      background-color: black;
      opacity: 0.5;
      border:2px solid red;
+     height: 225px;
+     max-width: 160px;
+     width: 100%;
  }
 
 .opacoLarge{
@@ -44,9 +46,13 @@ body{background-color: black;}
 .ratingFilm {
     position:absolute;
     z-index:1;
-    margin-left:5%;
 }
 
+.ratingFilms{
+    position:absolute;
+    z-index:1;
+    margin-left:5%;
+}
 
 .titleFilm p{
     color: white;
@@ -73,10 +79,22 @@ p{
     color: darkgrey;
 }
 
+#firstFilm{
+    text-align: center;
+    margin-top: 15%;
+}
+
+ #firstFilm i{
+     font-size:120px;
+     color: red;
+ }
+
 
 /********************/
 /*CAROUSEL CARTELERA*/
 /*******************/
+
+
 
 .lists{
     padding-top:3%;
@@ -99,7 +117,7 @@ p{
 .carousel-showsixmoveone .cloneditem-5 {
     display: none;
 }
-@media all and (min-width: 768px) {
+@media all and (min-width: 1200px) {
     .carousel-showsixmoveone .carousel-inner > .active.left,
     .carousel-showsixmoveone .carousel-inner > .prev {
         left: -33.333%;
@@ -180,22 +198,41 @@ p{
         left: 0;
     }
 }
-.container {
-    margin-bottom: 50px;
-}
 
 @media only screen and (min-width: 768px) {
     .logo {
-        margin: 28px;
+        margin: 10px;
         float: left;
+        max-height: 30px;
+        max-width: 30px;
     }
+}
+
+@media only screen and (max-width: 767px) {
+    #bs-example-navbar-collapse-1 {
+        background-color: black;
+    }
+}
+
+img.logo{
+    margin: 10px;
+    max-height: 30px;
+    max-width: 30px;
 }
 
 
 .carousel-inner>.item>a>#imgShort, .carousel-inner>.item>#imgShort, .img-responsive, .thumbnail a>img, .thumbnail>img   {
     height: 225px;
-    width: 100%;
     max-width: 160px;
+    width: 100%;
+
+}
+
+.carousel-inner>.item>a>#imgLarge, .carousel-inner>.item>#imgLarge   {
+    height: 350px;
+    max-width: 100%;
+    width: 100%;
+
 }
 
 /*********/
@@ -209,10 +246,22 @@ p{
     margin-left: 10px;
 }
 
-
 /********/
 /*NAVBAR*/
 /********/
+
+.button.navbar-toggle{
+    background-color: black;
+}
+
+.navbar-right{
+    float: right;
+}
+
+.navbar-fixed-bottom .navbar-collapse, .navbar-fixed-top .navbar-collapse{
+    max-height: 100%;
+    min-width: 780px;
+}
 
 .navbar-default .navbar-brand, .navbar-default .navbar-brand{
     color: red;
@@ -226,6 +275,7 @@ p{
     color:white;
     background-color: transparent;
 }
+
 
 .navbar-default .navbar-nav>li>a:focus, .navbar-default .navbar-nav>li>a:hover{
     color:whitesmoke;
@@ -265,12 +315,32 @@ nav.navbar.scroll{
     overflow: hidden;
 }
 
+
 #listOptions li {
     float: left;
+    margin-right:0.3%;
 }
 
 #listOptions li button {
-    margin-top:28%;
+    margin-top:25px;
+}
+
+#listTitleEraseList{
+    list-style-type: none;
+}
+
+#listTitleEraseList li{
+    float:left;
+    width: 50%;
+}
+
+#listTitleEraseList li button{
+    text-align: center;
+    margin-top:3%;
+}
+
+#searchFilms{
+    color:white;
 }
 
 
@@ -292,6 +362,12 @@ nav.navbar.scroll{
 /* Dropdown button on hover & focus */
 .dropbtn:hover, .dropbtn:focus {
     background-color: indianred;
+}
+
+.ratingFilmInfo{
+    max-width: 200px;
+    position:absolute;
+    z-index:1;
 }
 
 /* The container <div> - needed to position the dropdown content */
@@ -348,7 +424,9 @@ nav.navbar.scroll{
 }
 
 .titlefilm{
+
     float:left;
+    background-color: pink;
 }
 
 .glyphyInfo{
@@ -375,7 +453,7 @@ nav.navbar.scroll{
 }
 
 .filmData{
-    padding-left: 2%;
+    padding-left: 80px;
     float:left;
     width: 75%;
 }
@@ -446,11 +524,11 @@ iframe{
 }
 
 .profile{
-    border: red;
-    height: 400px;
-    width: 500px ;
-    background-color: pink;
-    margin-left: 30%;
+    height: 275px;
+    width: 350px ;
+    border-radius: 25px;
+    border: 2px solid red;
+    margin-left: 35%;
     margin-top: 10%;
 }
 
@@ -466,6 +544,253 @@ iframe{
 }
 
 .profileData{
-    float:left;
-    margin-left: 10%;
+    text-align: center;
+    margin-top:7%;
+
+}
+
+.profileData i{
+    font-size: 100px;
+}
+
+
+.filmCover{
+    float: left;
+    margin: 5px;
+    height: 280px;
+    max-width: 180px;
+    width: 100%;
+}
+
+/*ACORDEON FILMS*/
+
+.containerExpand {
+    margin-top:100px;
+}
+
+.expandcollapse-item {
+    overflow: hidden;
+}
+
+.expandcollapse-heading-collapsed {
+    cursor: pointer;
+    padding: 15px 20px;
+    position: relative;
+    background-color: red;
+
+}
+
+.expandcollapse-item:first-of-type {
+    border-top:0px;
+}
+
+
+.expandcollapse-heading-collapsed p{
+    font-size: 16px;
+    font-weight: normal;
+    margin:0px;
+    color:white;
+}
+
+
+
+.expandcollapse-heading-expanded {
+    cursor: pointer;
+    padding: 15px 20px;
+    position: relative;
+    color: white;
+    background-color: black;
+    /*border: 1px solid red;*/
+    border-style: inset;
+    border-color:red;
+}
+
+.expandcollapse-heading-expanded p{
+    font-size: 16px;
+    font-weight: bold;
+    margin:0px;
+}
+
+.expandcollapse-heading-collapsed > span,
+.expandcollapse-heading-expanded > span {
+    position:absolute;
+    top: 25px;
+    right: 15px;
+    font-size: 20px;
+    line-height: 0px;
+}
+
+.expand-collapse-content {
+    padding: 20px;
+}
+
+
+/*
+animation:*/
+
+.slideDown.ng-hide {
+    height:0;
+    transition:height 0.35s ease;
+    overflow:hidden;
+    position:relative;
+}
+
+.slideDown {
+    height:auto;
+    transition:height 0.35s ease;
+    overflow:hidden;
+    position:relative;
+}
+
+.slideDown.ng-hide-remove,
+.slideDown.ng-hide-add {
+    /* remember, the .hg-hide class is added to element
+    when the active class is added causing it to appear
+    as hidden. Therefore set the styling to display=block
+    so that the hide animation is visible */
+    display:block!important;
+}
+
+
+.slideDown.ng-hide-add {
+    animation-name: hide;
+    -webkit-animation-name: hide;
+
+    animation-duration: .5s;
+    -webkit-animation-duration: .5s;
+
+    animation-timing-function: ease-in;
+    -webkit-animation-timing-function: ease-in;
+}
+
+
+
+.slideDown.ng-hide-remove {
+    animation-name: show;
+    -webkit-animation-name: show;
+
+    animation-duration: .5s;
+    -webkit-animation-duration: .5s;
+
+    animation-timing-function: ease-out;
+    -webkit-animation-timing-function: ease-out;
+}
+
+/*COMENTS*/
+
+#dv1{
+    border:1px solid #DBDCE9;
+    margin-top:20px;
+    margin-left:auto; margin-right:auto;
+    width:90%;
+    border-radius:7px;
+    padding: 25px;
+    margin-bottom: 20px;
+}
+
+#dv1 div {
+    width: 200px;
+}
+
+#dv1 textarea{
+    width: 100%;
+}
+
+#dv1 h2 {
+    font: 400 40px/1.5 Helvetica, Verdana, sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+#dv1 ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+}
+
+#dv1 li {
+    font: 200 20px/1.5 Helvetica, Verdana, sans-serif;
+    border-bottom: 1px solid #ccc;
+}
+
+#dv1 li:last-child {
+    border: none;
+}
+
+#dv1 button{
+    background-color:red;
+    color:black;
+    border-color: white;
+}
+
+#dv1 p, #dv1 h4{
+    color:white;
+}
+
+#dv1 p{
+    font-size: 15px;
+}
+
+.expandcollapse-item .comments{
+    overflow: hidden;
+}
+
+.comments .expandcollapse-heading-collapsed {
+    cursor: pointer;
+    padding: 15px 20px;
+    position: relative;
+    background-color: red;
+    width: 90%;
+    margin-left:auto; margin-right:auto;
+    margin-top:20px;
+
+}
+
+.comments .expandcollapse-item:first-of-type {
+    border-top:0px;
+}
+
+
+.comments .expandcollapse-heading-collapsed p{
+    font-size: 20px;
+    font-weight: normal;
+    margin:0px;
+    color:white;
+
+}
+
+.comments .expandcollapse-heading-expanded {
+    cursor: pointer;
+    padding: 15px 20px;
+    position: relative;
+    color: white;
+    background-color: black;
+    border-style: inset;
+    border-color:black;
+    width: 90%;
+    margin-left:auto; margin-right:auto;
+    margin-top:20px;
+}
+
+.comments .expandcollapse-heading-expanded p{
+    font-size: 20px;
+    font-weight: bold;
+    margin:0px;
+}
+
+.comments .expandcollapse-heading-collapsed > span,
+.comments .expandcollapse-heading-expanded > span {
+    position:absolute;
+    top: 25px;
+    right: 15px;
+    font-size: 20px;
+    line-height: 0px;
+}
+
+.comments .expand-collapse-content {
+    padding: 20px;
+}
+
+.comments a{
+    float:right;
 }

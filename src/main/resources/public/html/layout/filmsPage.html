@@ -1,19 +1,68 @@
-<div id="allFilms" ng-controller="filmsController" ng-repeat="film in films">
-        <div class="thumbwrap col-xs-12 col-sm-4 col-md-2">
-            <a class="thumb" href="/filmpage/{{film.id}}">
-                <div class="ratingFilm">
-                    <div ng-app="app" ng-controller="ratingController as rating" class="container">
-                        <star-rating ng-model="film.rating" readonly="rating.isReadonly"></star-rating>
+<div ng-controller="expandCollapseCtrl">
+
+    <div class="containerExpand">
+
+        <div class="expandcollapse-item">
+
+            <div class="expandcollapse-item">
+                    <div ng-click="activeMyFilms = !activeMyFilms"
+                         ng-class="{'expandcollapse-heading-collapsed': activeMyFilms, 'expandcollapse-heading-expanded': !activeMyFilms}">
+                        <p>My Films</p></p>
+                    </div>
+
+                    <div class="slideDown" ng-hide="activeMyFilms" >
+                        <div class="expand-collapse-content">
+                        <div ng-repeat="film in films" class="thumbwrap col-xs-12 col-sm-4 col-md-2">
+                            <a class="thumb" href="/filmpage/{{film.id}}">
+                                <div class="ratingFilms">
+                                    <div ng-app="app" ng-controller="ratingFilmsController as rating" class="container">
+                                        <star-rating ng-model="film.rating" readonly="rating.isReadonly"></star-rating>
+                                    </div>
+                                </div>
+                                <div data-toggle="tooltip" title="{{film.synopsis}}" class="opaco"></div>
+                                <img ng-src="{{film.urlImage}}"
+                                     onerror="this.src='http://www.reelviews.net/resources/img/default_poster.jpg'"
+                                     alt="Image"
+                                     class="img-responsive" for="info">
+
+                                <div class="titleFilm">
+                                    <p>{{film.title}}</p>
+                                </div>
+                            </a>
+                        </div>
                     </div>
                 </div>
-                <div data-toggle="tooltip" title="{{film.synopsis}}" class="opaco"></div>
-                <img ng-src="{{film.urlImage}}" alt="Image" class="img-responsive" for="info">
+            </div>
 
-                <div class="titleFilm">
-                    <p>{{film.title}}</p>
+
+            <div class="expandcollapse-item">
+                <div ng-click="activeAllFilms = !activeAllFilms"
+                     ng-class="{'expandcollapse-heading-collapsed': activeAllFilms, 'expandcollapse-heading-expanded': !activeAllFilms}">
+                    <p>All Films</p></p>
                 </div>
-            </a>
+
+                <div class="slideDown" ng-hide="activeAllFilms" >
+                    <div class="expand-collapse-content">
+                        <div ng-repeat="allfilm in allfilms" class="thumbwrap col-xs-12 col-sm-4 col-md-2">
+                            <a class="thumb" href="/infofilm/{{allfilm.idPublicFilm}}">
+
+                                <div data-toggle="tooltip" title="{{allfilm.synopsis}}" class="opaco"></div>
+                                <img ng-src="{{allfilm.urlImage}}"
+                                     onerror="this.src='http://www.reelviews.net/resources/img/default_poster.jpg'"
+                                     alt="Image"
+                                     class="img-responsive" for="info">
+
+                                <div class="titleFilm">
+                                    <p>{{allfilm.title}}</p>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
         </div>
-</div>
+
 
 

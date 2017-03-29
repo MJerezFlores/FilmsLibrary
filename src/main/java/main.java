@@ -4,9 +4,7 @@ import filmLibrary.controllers.FilmController;
 import filmLibrary.controllers.ListsController;
 import filmLibrary.controllers.UserController;
 import filmLibrary.deserializer.ListFilmSerializer;
-import filmLibrary.model.Film;
-import filmLibrary.model.ListFilm;
-import filmLibrary.model.User;
+import filmLibrary.model.*;
 import org.apache.commons.io.FileUtils;
 import spark.Spark;
 
@@ -22,7 +20,7 @@ public class main {
     private static final UserController userController = new UserController();
 
     public static void main(String[] args) {
-
+        port(7070);
         String projectDir = System.getProperty("user.dir");
         String staticDir = "/src/main/resources/public";
         Spark.staticFiles.externalLocation(projectDir + staticDir);
@@ -30,21 +28,57 @@ public class main {
 //        Spark.staticFiles.location("/public");
 
 
-        get("api/user/:nickname/:pass", (req, res)-> {
+        get("/api/films/comments/:filmID", (req, res) ->{
+           return new Gson().toJson(filmController.getComments(req.params("filmID")));
+        });
+
+        delete("/api/films/comments/:id", (req, res) ->{
+            return filmController.deleteComment(Integer.parseInt(req.params("id")));
+        });
+
+        post("/api/films/comments/add", (req, res) ->{
+            return filmController.addComment(new Gson().fromJson(req.body(), Comment.class));
+        });
+
+
+        get("/api/user/:userID", (req, res) -> {
+            User user = userController.getUser(req.params(":userID"));
+            user.setIpConection(req.ip());
+            return new Gson().toJson(user);
+        });
+
+        get("/api/user/:nickname/:pass", (req, res)-> {
             if (userController.existUser(req.params("nickname"), req.params("pass")) == null ) {
                 res.status(400);
                 return res.body();
             }else {
-                return new Gson().toJson(userController.existUser(req.params("nickname"), req.params("pass")));
+                User user = userController.existUser(req.params("nickname"), req.params("pass"));
+                user.setIpConection(req.ip());
+                return new Gson().toJson(user);
             }
         });
 
-        post("api/user/add", (req, res) ->{
+        post("/api/user/add", (req, res) ->{
             return userController.createUser(new Gson().fromJson(req.body(), User.class));
         });
 
-        get("api/film/all", (req, res)-> {
-            return new Gson().toJson(filmController.getFilms());
+        get("/api/film/all/:nickname", (req, res)-> {
+            return new Gson().toJson(filmController.getFilms(req.params("nickname")));
+        });
+
+        get("/api/films/:filmID", (req, res) -> {
+            FilmPublic film = filmController.getFilmGeneral(Integer.parseInt(req.params("filmID")));
+            return new Gson().toJson(film);
+        });
+
+        post("/api/films/add/:filmID/:nickname", (req, res) -> {
+            FilmPublic filmPublic= filmController.getFilmGeneral(Integer.parseInt(req.params("filmID")));
+            filmController.createFromFilmPublic(Integer.parseInt(req.params("filmID")), req.params("nickname"), filmPublic);
+            return "";
+        });
+
+        get("/api/films/main/:nickname", (req, res) -> {
+            return new Gson().toJson(filmController.getMainFilms(req.params("nickname")));
         });
 
         get("/api/film/:filmID", (req, res) -> {
@@ -60,8 +94,13 @@ public class main {
             return filmController.create(new Gson().fromJson(req.body(), Film.class));
         });
 
+
         post("/api/film/edit", (req, res) -> {
             return filmController.modify(new Gson().fromJson(req.body(), Film.class));
+        });
+
+        get("/api/films" , (req, res) -> {
+            return new Gson().toJson(filmController.getFilms());
         });
 
         get("/api/list/:listFilmID", (req, res) -> {
@@ -104,8 +143,8 @@ public class main {
         });
 
 
-        get("/api/search/categories", (req, res) -> {
-            return new Gson().toJson(filmController.getCategories());
+        get("/api/search/categories/:nickname", (req, res) -> {
+            return new Gson().toJson(filmController.getCategories(req.params(":nickname")));
         });
 
 
@@ -113,13 +152,23 @@ public class main {
             return new Gson().toJson(filmController.getFilmsGenre(req.params(":genre")));
         });
 
-        get("/api/search/title/:title", (req, res) -> {
-            return new Gson().toJson(filmController.getFilmsTitle(req.params(":title")));
+        get("/api/search/title/:title/:nickname", (req, res) -> {
+            return new Gson().toJson(filmController.getFilmsTitle(req.params(":title"), req.params(":nickname")));
         });
 
-        get("/api/search/order/:order", (req, res) -> {
-            return new Gson().toJson(filmController.getFilmsOrder(req.params(":order")));
+        get("/api/search/title/:nickname", (req, res) -> {
+            return new Gson().toJson(filmController.getFilmsTitle(req.params(":title"), req.params(":nickname")));
         });
+
+        get("/api/search/order/:order/:nickname", (req, res) -> {
+            return new Gson().toJson(filmController.getFilmsOrder(req.params(":order"), req.params(":nickname")));
+        });
+
+        post("/api/add-ip/:userID", (req, res) -> {
+            Map<String, String> map = new Gson().fromJson(req.body(), Map.class);
+            return userController.addIP(map.get("local"),map.get("remote"), req.params(":userID"));
+        });
+
 
 
 //        get("/api/search/:genre/:title/:order", (req, res) -> {

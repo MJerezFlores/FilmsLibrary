@@ -27,23 +27,21 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <a class="navbar-brand" href="#">Logo</a>
+            <a href="/homepage"><img class="logo" src="http://www.nosoydirectordecine.com/blog/images/logo/logo.png"></a>
         </div>
 
         <!-- Collect the nav links, forms, and other content for toggling -->
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
             <ul class="nav navbar-nav">
-                <li class="active"><a href="/homepage">Home <span class="sr-only">(current)</span></a></li>
                 <li><a href="/listspage">My Lists</a></li>
                 <li><a href="/filmspage">My Films</a></li>
                 <li><a href="/profile">My Profile</a></li>
-
             </ul>
 
             <ul class="nav navbar-nav navbar-right">
-                <li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Genre<span class="caret"></span></a>
-                    <ul class="dropdown-menu" ng-controller="genreController">
+                <li class="dropdown" ng-controller="genreController">
+                    <a href="#" ng-click="researchCategories()" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Genre<span class="caret"></span></a>
+                    <ul class="dropdown-menu">
                         <li role="separator" class="divider"></li>
                         <li ng-repeat="genre in genres"><a href="/search/genre/{{genre}}">{{genre}}</a></li>
                     </ul>
@@ -53,17 +51,18 @@
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Order<span class="caret"></span></a>
                     <ul class="dropdown-menu">
                         <li role="separator" class="divider"></li>
-                        <li><a href="/search/order/rating">Rating</a></li>
+                        <li><a href="/search/order/rating DESC">Rating</a></li>
                         <li><a href="/search/order/year">Year</a></li>
                         <li><a href="/search/order/title ASC">A-Z</a></li>
                         <li><a href="/search/order/title DESC">Z-A</a></li>
                     </ul>
                 </li>
 
+
                 <!--SearchFilms-->
                 <form ng-controller="searchTextController" class="navbar-form navbar-left" ng-submit="addSearch()">
                     <div class="input-group">
-                        <input ng-model="search.title" type="text" class="form-control" placeholder="Search">
+                        <input ng-model="search.title" type="text" class="form-control" id="searchFilms" placeholder="Search">
                         <div class="input-group-btn">
                             <button type="submit" class="btn btn-default">
                                 <span class="glyphicon glyphicon-search"></span>
@@ -132,7 +131,13 @@
                 <div class="form-group row">
                     <label class="col-xs-2 col-form-label">Rating</label>
                     <div class="col-xs-9">
-                        <input ng-model="film.rating" class="form-control">
+                        <select ng-model="film.rating" >
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                            <option value="4">4</option>
+                            <option value="5">5</option>
+                        </select>
                     </div>
                 </div>
                 <div class="form-group row">
@@ -169,7 +174,7 @@
 <script src="../bower_components/angular-resource/angular-resource.min.js"></script>
 <script src="../bower_components/angular-messages/angular-messages.min.js"></script>
 <script src="../bower_components/angular-cookies/angular-cookies.min.js"></script>
-
+<script src="../bower_components/angular-sanitize/angular-sanitize.min.js"></script>
 
 
 <script src="../js/app.js"></script>

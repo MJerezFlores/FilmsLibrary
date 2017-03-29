@@ -4,7 +4,7 @@
 <!--INFO FILM-->
 <!--########-->
 
-    <div ng-controller="filmpageController" class="title-info">
+    <div class="title-info">
         <ul class="titleRight">
             <li><h2>{{film.title}}</h2></li>
         </ul>
@@ -13,24 +13,27 @@
                 <div class="dropdown">
                     <button onclick="myFunction()" class="dropbtn">Add to List</button>
                     <div ng-controller="listspageController" id="myDropdown" class="dropdown-content" >
-                    <div ng-repeat="list in listFilms">
-                        <a href="" ng-controller="listModifyController" ng-click="addFilmInList(list.id, 'addFilm')">{{list.title}}</a>
-                    </div>
                         <a href=#><span class="glyphicon glyphicon-plus" data-toggle="modal" data-target="#addListModal"></span></a>
+                        <div ng-repeat="list in listFilms">
+                            <a href="" ng-controller="listModifyController" ng-click="addFilmInList(list.id, 'addFilm')">{{list.title}}</a>
+                        </div>
                     </div>
                 </div>
             </li>
             <li><button class="editButtonInfo"><span class="glyphicon glyphicon-edit glyphyInfo" aria-hidden="true" data-toggle="modal" data-target="#myModalEdit"></span></button></li>
-            <li><button ng-controller="filmpageController" class="deleteButtonInfo" ng-click="deleteFilm(film.id)"><span class="glyphicon glyphicon-trash glyphyInfo" aria-hidden="true"></span></button></li>
+            <li><button class="deleteButtonInfo" ng-click="deleteFilm(film.id)"><span class="glyphicon glyphicon-trash glyphyInfo" aria-hidden="true"></span></button></li>
         </ul>
     </div>
 <div class="row">
 <div class="filmImageData">
     <div class="filmImage">
-        <div class="imageFilm"> <img ng-src="{{film.urlImage}}" alt="Image" class="img-responsive"> </div>
+        <div class="imageFilm"> <img ng-src="{{film.urlImage}}" onerror="this.src='http://www.reelviews.net/resources/img/default_poster.jpg'" alt="Image" class="img-responsive"> </div>
         <div class="yearRating">
             <h3>Year</h3>  <p> {{film.year}} </p>
-            <h3>Rating</h3>  <p>{{film.rating}}</p>
+            <h3>Rating</h3>
+                <div class="ratingFilm container" ng-controller="ratingFilmController as rating">
+                    <star-rating ng-model="film.rating" readonly="rating.isReadonly"></star-rating>
+                </div>
         </div>
     </div>
     <div class="filmData">
@@ -42,28 +45,42 @@
         <p>{{film.actors}}</p>
         <h3>Genre</h3>
         <p>{{film.genre}}</p>
-        <h3>Watch the movie</h3>
-        <p><a href=#><span data-path-film="{{film.path}}" class="glyphicon glyphicon-facetime-video" data-toggle="modal" data-target="#iframeModal"></span></a></p>
-
-        <!--<iframe src="file:///\\MACA-PORTATIL\Anime\Boku No Hero Academy\01.mp4" frameborder="0"></iframe>-->
-
-        <h1>HTML5 local video file player example</h1>
-        <div id="message"></div>
-        <input type="file" accept="video/*" ng-click="playSelectedFile()"/>
-        <video controls autoplay></video>
-
-        <script>
-        </script>
+        <!--<h3>Watch the movie</h3>-->
 
 
-        <a href="file:////MACA-PORTATIL/Anime/Boku%20No%20Hero%20Academy/01.mp4" onclick="window.open('file:////MACA-PORTATIL/Anime/Boku%20No%20Hero%20Academy/01.mp4')">CLICK ME</a>
-        <video width="400" controls="">
-            <source src= "file:///MACA-PORTATIL/Anime/Boku%20No%20Hero%20Academy/01.mp4" type="video/mp4">
+        <p>
+            <a ng-controller="pathController" href=#><span data-path-film="{{trustSrc(user.ipLocal, user.ipRemote,user.ipConection, film.path)}}" class="glyphicon glyphicon-facetime-video" data-toggle="modal" data-target="#iframeModal"></span>
+            </a>
+        </p>
+
+
+        <video ng-controller="pathController" ng-src="{{trustSrc(user.ipLocal, user.ipRemote,user.ipConection, film.path)}}"  width="400" controls preload="none">
+            <source ng-src="{{trustSrc(user.ipLocal, user.ipRemote, user.ipConection, film.path)}}" type="video/mp4">
             Your browser does not support HTML5 video.
         </video>
 
+
     </div>
 </div>
+
+    <div class="expandcollapse-item comments">
+        <div ng-click="activeMyFilms = !activeMyFilms"
+             ng-class="{'expandcollapse-heading-collapsed': activeMyFilms, 'expandcollapse-heading-expanded': !activeMyFilms}">
+            <p>Comments</p></p>
+        </div>
+
+        <div id='dv1' ng-hide="activeMyFilms">
+            <form>
+                <form>
+                    <textarea ng-model="txtcomment" placeholder="Your Comment"></textarea>
+                    <button ng-click='btn_add(film.idPublicFilm);' style='margin-top:10px;'><p>Post Comment</p></button>
+                    <ul>
+                        <li ng-repeat="comment in comments"> <p><b>{{comment.nickname}}:</b>  {{comment.comment}}<a ng-show="isUser(comment.nickname)" href="" ng-click="remItem(comment.id)">x </a> </p></li>
+                    </ul>
+                </form>
+            </form>
+        </div>
+    </div>
 </div>
 
 
@@ -74,17 +91,19 @@
 <!--########-->
 <!--IFRAME MODAL-->
 <!--########-->
+
 <div class="modal modal fade " id="iframeModal" role="dialog">
     <button type="button" class="close" data-dismiss="modal">&times;</button>
-    <iframe id="pathFilm" src=""></iframe>
-
+    <iframe id="pathFilm" type="text/html" src=""></iframe>
 </div>
+
 <script>
     $('#iframeModal').on('show.bs.modal', function(e) {
         var pathFilm= $(e.relatedTarget).data('path-film');
         $("#pathFilm").attr("src", pathFilm);
     });
 </script>
+
 <!--########-->
 <!--//IFRAME MODAL-->
 <!--########-->
@@ -107,7 +126,7 @@
             <div class="form-group row">
                 <label class="col-xs-2 col-form-label">Title</label>
                 <div class="col-xs-9">
-                    <input ng-model="film.title" class="form-control" required >
+                    <input ng-model="film.title" class="form-control" required>
                 </div>
             </div>
             <div class="form-group row">
@@ -149,7 +168,9 @@
             <div class="form-group row">
                 <label class="col-xs-2 col-form-label">Rating</label>
                 <div class="col-xs-9">
-                    <input ng-model="film.rating" class="form-control">
+                    <div class="ratingFilm container" ng-controller="ratingFilmController as rating">
+                        <star-rating ng-model="film.rating" readonly="!rating.isReadonly"></star-rating>
+                    </div>
                 </div>
             </div>
             <div class="form-group row">
@@ -170,7 +191,12 @@
     </form>
 </div>
 
-<div ng-controller="addListController" class="modal fade" id="addListModal" role="dialog">
+
+
+<!--MODAL NEW LIST-->
+<!--########-->
+
+<div class="modal fade" id="addListModal" role="dialog">
     <form name="myForm" ng-submit="addList()">
         <div class="modal-dialog">
             <!-- Modal content-->

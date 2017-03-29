@@ -26,4 +26,16 @@ public class UserController {
 
     }
 
+    public String addIP(String local, String remote, String nickname) {
+        try {
+            datamapperUser.addIpUser(local, remote, nickname);
+            return "ip added";
+        }catch (Exception e){
+            return e.getMessage();
+        }
+    }
+
+    public User getUser(String nickname) {
+        return datamapperUser.getUser(nickname);
+    }
 }

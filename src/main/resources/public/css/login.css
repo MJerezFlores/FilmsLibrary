@@ -1,5 +1,13 @@
 * { box-sizing:border-box; }
 
+body{
+    margin-top: 150px;
+}
+
+.navbar-default .navbar-collapse, .navbar-default .navbar-form{
+    background-color: black;
+}
+
 h1, h3 { font-weight: 300; }
 
 h1 { color: #636363; }

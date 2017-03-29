@@ -1,26 +1,33 @@
 <div class="carousel carousel-showsixmoveone slide" id="{{id}}">
-    <div  class="carousel-inner">
-        <div id ="itemCarouselList" class="item " ng-class="{active : $first}" ng-repeat="film in elements">
-            <div class="thumbwrap col-xs-12 col-sm-4 col-md-2">
+    <div class="carousel-inner">
+        <div id="itemCarouselList" class="item " ng-class="{active : $first}" ng-repeat="film in elements">
+            <div class="col-xs-12 col-sm-4 col-md-2 filmCover">
                 <a class="thumb" href="/filmpage/{{film.id}}">
-                    <div class="ratingFilm">
-                        <div ng-app="app" ng-controller="ratingController as rating" class="container">
+                    <div class="ratingFilms" ng-controller="ratingFilmsController as rating">
+                        <div class="container">
                             <star-rating ng-model="film.rating" readonly="rating.isReadonly"></star-rating>
                         </div>
                     </div>
                     <div data-toggle="tooltip" title="{{film.synopsis}}" class="opaco"></div>
-                    <img id="imgShort" ng-src="{{film.urlImage}}" alt="Image" class="img-responsive" for="info">
+                    <img id="imgShort" ng-src="{{film.urlImage}}"
+                         onerror="this.src='http://www.reelviews.net/resources/img/default_poster.jpg'" alt="Image"
+                         class="img-responsive" for="info">
                 </a>
                 <div class="titleFilm">
-                <p>{{film.title}}</p>
+                    <ul id="listTitleEraseList" ng-controller="listModifyController">
+                        <li><p>{{film.title}}</p></li>
+                        <li>
+                            <button class="editButtonInfo" ng-click="deleteFilmOnList(id, film.id,'deleteFilm')"><i
+                                    class="fa fa-eraser" aria-hidden="true" style="color: red"></i></button>
+                        </li>
+                    </ul>
                 </div>
             </div>
         </div>
     </div>
 
 
-
-    <a ng-hide="elements.length < 6" class="left carousel-control" href="#{{id}}" data-slide="prev"><i class="glyphicon glyphicon-chevron-left"></i></a>
-    <a ng-hide="elements.length < 6" class="right carousel-control" href="#{{id}}" data-slide="next"><i class="glyphicon glyphicon-chevron-right"></i></a>
+    <a ng-hide="elements.length < 7" class="left carousel-control" href="#{{id}}" data-slide="prev"><i class="glyphicon glyphicon-chevron-left"></i></a>
+    <a ng-hide="elements.length < 7" class="right carousel-control" href="#{{id}}" data-slide="next"><i class="glyphicon glyphicon-chevron-right"></i></a>
 </div>
 

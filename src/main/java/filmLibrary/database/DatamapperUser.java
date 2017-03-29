@@ -16,12 +16,19 @@ public class DatamapperUser extends Datamapper<User>{
             update(createUserQuery(user.getNickname(),user.getEmail(),user.getPass()));
     }
 
+    public void addIpUser(String local, String remote,String nickname) {
+        update(createAddIpQuery(local,remote, nickname));
+    }
+
+    public User getUser(String nickname) {
+        return load(createLoadQuery(nickname));
+    }
 
     @Override
     protected User mapElementSimple(ResultSet rs) {
         try {
             while(rs.next()){
-                return new User(rs.getString("nickname"), rs.getString("email"), rs.getString("password"));
+                return new User(rs.getString("nickname"), rs.getString("email"), rs.getString("password"), rs.getString("ipLocal"), rs.getString("ipRemote"));
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -33,7 +40,7 @@ public class DatamapperUser extends Datamapper<User>{
     protected User mapElementExtraLoop(ResultSet rs) {
         try {
             while(rs.next()){
-                return new User(rs.getString("nickname"), rs.getString("email"), rs.getString("password"));
+                return new User(rs.getString("nickname"), rs.getString("email"), rs.getString("password"), rs.getString("ipLocal"), rs.getString("ipRemote"));
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -49,8 +56,17 @@ public class DatamapperUser extends Datamapper<User>{
         return "(SELECT * FROM user WHERE nickname = '"+nickname+"' AND password = '"+pass+"')";
     }
 
+    private String createLoadQuery(String nickname) {
+        return "SELECT * FROM user WHERE nickname = '"+nickname+"'";
+    }
+
     private String createDeleteQuery(String nickname, String pass) {
         return "(DELETE FROM user WHERE nickname = '"+nickname+"', password = '"+pass+"')";
     }
+
+    private String createAddIpQuery(String local,String remote, String nickname) {
+        return "UPDATE user SET ipLocal='"+local+"', ipRemote='"+remote+"' WHERE nickname='"+nickname+"' ";
+    }
+
 
 }
