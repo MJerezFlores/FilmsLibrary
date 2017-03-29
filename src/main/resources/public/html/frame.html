@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="../bower_components/bootstrap/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="../css/homepage.css">
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Kreon|Open+Sans" rel="stylesheet">
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="../bower_components/angular-material/angular-material.min.css">
+
+
+</head>
+
+<body ng-app="myApp">
+<!--########-->
+<!--CABECERA-->
+<!--########-->
+<nav class="navbar navbar-default navbar-fixed-top">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a href="/homepage"><img class="logo" src="http://www.nosoydirectordecine.com/blog/images/logo/logo.png"></a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav">
+                <li><a href="/listspage">My Lists</a></li>
+                <li><a href="/filmspage">My Films</a></li>
+                <li><a href="/profile">My Profile</a></li>
+            </ul>
+
+            <ul class="nav navbar-nav navbar-right">
+                <li class="dropdown" ng-controller="genreController">
+                    <a href="#" ng-click="researchCategories()" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Genre<span class="caret"></span></a>
+                    <ul class="dropdown-menu">
+                        <li role="separator" class="divider"></li>
+                        <li ng-repeat="genre in genres"><a href="/search/genre/{{genre}}">{{genre}}</a></li>
+                    </ul>
+
+                </li>
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Order<span class="caret"></span></a>
+                    <ul class="dropdown-menu">
+                        <li role="separator" class="divider"></li>
+                        <li><a href="/search/order/rating DESC">Rating</a></li>
+                        <li><a href="/search/order/year">Year</a></li>
+                        <li><a href="/search/order/title ASC">A-Z</a></li>
+                        <li><a href="/search/order/title DESC">Z-A</a></li>
+                    </ul>
+                </li>
+
+
+                <!--SearchFilms-->
+                <form ng-controller="searchTextController" class="navbar-form navbar-left" ng-submit="addSearch()">
+                    <div class="input-group">
+                        <input ng-model="search.title" type="text" class="form-control" id="searchFilms" placeholder="Search">
+                        <div class="input-group-btn">
+                            <button type="submit" class="btn btn-default">
+                                <span class="glyphicon glyphicon-search"></span>
+                            </button>
+                        </div>
+                    </div>
+                </form>
+                <li><a href="#"><span class="glyphicon glyphicon-plus" data-toggle="modal" data-target="#myModal"></span></a></li>
+            </ul>
+        </div><!-- /.navbar-collapse -->
+    </div><!-- /.container-fluid -->
+</nav>
+
+
+<div ng-controller="addFilmController" class="modal fade" id="myModal" role="dialog">
+    <form name="myForm" ng-submit="addFilm()">
+        <div class="modal-dialog">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">ADD FILM</h4>
+                </div>
+                <div class="form-group row">
+                    <label class="col-xs-2 col-form-label">Title</label>
+                    <div class="col-xs-9">
+                        <input ng-model="film.title" class="form-control" required>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label class="col-xs-2 col-form-label">Synopsis</label>
+                    <div class="col-xs-9">
+                        <input ng-model="film.synopsis" class="form-control">
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label class="col-xs-2 col-form-label">Genre</label>
+                    <div class="col-xs-9">
+                        <input ng-model="film.genre"  class="form-control">
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label class="col-xs-2 col-form-label">Year</label>
+                    <div class="col-xs-9">
+                        <input ng-model="film.year" class="form-control">
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label class="col-xs-2 col-form-label">Director</label>
+                    <div class="col-xs-9">
+                        <input ng-model="film.director" class="form-control">
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label class="col-xs-2 col-form-label">Actors</label>
+                    <div class="col-xs-9">
+                        <input ng-model="film.actors" class="form-control">
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label class="col-xs-2 col-form-label">Image</label>
+                    <div class="col-xs-9">
+                        <input ng-model="film.urlImage" class="form-control">
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label class="col-xs-2 col-form-label">Rating</label>
+                    <div class="col-xs-9">
+                        <select ng-model="film.rating" >
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                            <option value="4">4</option>
+                            <option value="5">5</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label class="col-xs-2 col-form-label">Path</label>
+                    <div class="col-xs-9">
+                        <input ng-model="film.path" class="form-control">
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-default">Save</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                </div>
+
+            </div>
+        </div>
+    </form>
+</div>
+
+<div ng-view>
+
+
+
+
+
+</div>
+
+<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+<script src="../bower_components/jquery/dist/jquery.min.js"></script>
+<script src="../bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+<script src="../bower_components/angular/angular.min.js"></script>
+<script src="../bower_components/angular-route/angular-route.js"></script>
+<script src="../bower_components/angular-resource/angular-resource.min.js"></script>
+<script src="../bower_components/angular-messages/angular-messages.min.js"></script>
+<script src="../bower_components/angular-cookies/angular-cookies.min.js"></script>
+<script src="../bower_components/angular-sanitize/angular-sanitize.min.js"></script>
+
+
+<script src="../js/app.js"></script>
+<script src="../js/navbarScript.js"> </script>
+
+</body>
+</html>

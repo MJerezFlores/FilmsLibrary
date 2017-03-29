@@ -28,10 +28,10 @@ public class ListsController {
         }
     }
 
-    public String modify(String listID, String actionList, String parameter) {
+    public String modify(String listID, String action, String parameter) {
         try {
             ModifyListFilms modifyListFilms = new ModifyListFilms();
-            Method method = modifyListFilms.getClass().getMethod(actionList, int.class ,String.class);
+            Method method = modifyListFilms.getClass().getMethod(action, int.class ,String.class);
             method.invoke(modifyListFilms,Integer.parseInt(listID),parameter);
             return "List modified";
         }catch (Exception e){

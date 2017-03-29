@@ -1,0 +1,66 @@
+<head>
+    <link rel="stylesheet" type="text/css" href="../../css/login.css">
+</head>
+<div ng-controller="LoginController">
+<form name="userForm" ng-submit="loginUser()">
+    <div class="group">
+        <input ng-model="user.nickname" type="text" name="nickname" required><span class="highlight"></span><span class="bar"></span>
+        <label>Nickname</label>
+    </div>
+    <div ng-messages="userForm.nickname.$error">
+        <div ng-message="required"></div>
+    </div>
+    <div class="group">
+        <input ng-model="user.pass" type="password" name="pass" required><span class="highlight"></span><span class="bar"></span>
+        <label>Password</label>
+    </div>
+    <div ng-messages="userForm.pass.$error">
+        <div ng-message="required"></div>
+    </div>
+    <button type="submit" class="button buttonBlue">Accept
+        <div class="ripples buttonRipples"><span class="ripplesCircle"></span></div>
+    </button>
+    <div class="linksLogin">
+        <a href="/register">Sign Up</a>
+        <br>
+        <a href="">I forgot my password</a>
+    </div>
+</form>
+</div>
+
+
+<script>
+    $(window, document, undefined).ready(function() {
+        $('input').blur(function() {
+            var $this = $(this);
+            if ($this.val())
+                $this.addClass('used');
+            else
+                $this.removeClass('used');
+        });
+
+        var $ripples = $('.ripples');
+
+        $ripples.on('click.Ripples', function(e) {
+
+            var $this = $(this);
+            var $offset = $this.parent().offset();
+            var $circle = $this.find('.ripplesCircle');
+
+            var x = e.pageX - $offset.left;
+            var y = e.pageY - $offset.top;
+
+            $circle.css({
+                top: y + 'px',
+                left: x + 'px'
+            });
+
+            $this.addClass('is-active');
+
+        });
+
+    });
+
+</script>
+
+</body>

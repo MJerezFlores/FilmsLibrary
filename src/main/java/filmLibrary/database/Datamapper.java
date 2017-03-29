@@ -1,5 +1,7 @@
 package filmLibrary.database;
-import java.sql.*;
+import filmLibrary.model.Search;
+
+import java.sql.ResultSet;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -9,7 +11,7 @@ public abstract class Datamapper<T> {
 
     protected T load(String query) {
         try {
-            T element = mapElement(database.read(query));
+            T element = mapElementSimple(database.read(query));
             database.closeConnection();
             return element;
         } catch (Exception e) {
@@ -23,7 +25,7 @@ public abstract class Datamapper<T> {
             LinkedList list = new LinkedList();
             ResultSet resultSet = database.read(query);
             while(resultSet.next()){
-                list.add(mapElement(resultSet));
+                list.add(mapElementExtraLoop(resultSet));
             }
             database.closeConnection();
             return list;
@@ -32,6 +34,7 @@ public abstract class Datamapper<T> {
         }
         return null;
     }
+
 
     protected void update(String query) {
         try {
@@ -54,6 +57,29 @@ public abstract class Datamapper<T> {
         return null;
     }
 
-    protected abstract T mapElement(ResultSet resultSet);
+    protected List<String> loadGenres(String query) {
+        try {
+            LinkedList list = new LinkedList();
+            ResultSet resultSet = database.read(query);
+            while(resultSet.next()){
+                list.add(DatamapperFilm.mapElementGenre(resultSet));
+            }
+            database.closeConnection();
+            return list;
+        } catch (Exception e) {
+            System.out.println("ExceptionBaseDeDatos: " + e.getMessage());
+        }
+        return null;
+    }
+
+
+
+    protected abstract T mapElementSimple(ResultSet resultSet);
+    protected abstract T mapElementExtraLoop(ResultSet resultSet);
+
+    public List<T> search(Search search){
+        return multipleLoad("SELECT * FROM film WHERE " + search.getDataBaseExpression());
+    };
+
 
 }

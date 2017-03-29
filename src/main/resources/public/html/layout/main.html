@@ -1,0 +1,153 @@
+
+<!--########-->
+<!--CARROUSEL-->
+<!--########-->
+<div>
+
+    <div ng-show="loaded&& !(filmsMain.length > 0)" id="firstFilm" ng-controller="profileController">
+        <h1>Welcome {{nickname}}!</h1>
+        <h1>Add your first movie</h1>
+        <a href="#"><i class="material-icons" data-toggle="modal" data-target="#myModal">add_circle</i></a>
+    </div>
+
+
+    <div ng-show="loaded&& filmsMain.length > 0" id="myCarousel" class="carousel slide" data-ride="carousel">
+        <!-- Indicators -->
+        <ol class="carousel-indicators">
+            <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
+            <li data-target="#myCarousel" data-slide-to="1"></li>
+            <li data-target="#myCarousel" data-slide-to="2"></li>
+            <li data-target="#myCarousel" data-slide-to="3"></li>
+        </ol>
+        <!--<a class="thumb" href="/filmpage/{{filmMain.id}}">-->
+
+
+        <!-- Wrapper for slides -->
+        <div id="carouselPrincipal" class="carousel-inner" role="listbox">
+            <div class="item box" ng-class="{active : $first}" ng-repeat="filmMain in filmsMain">
+                <a href="/filmpage/{{filmMain.id}}">
+                <div class="opacoLarge"></div>
+                <img id="imgLarge" ng-src="{{filmMain.urlImage}}"
+                     onerror="this.src='https://cdn.traileraddict.com/images/errors/noposter.jpg'"
+                     alt="Image"
+                     class="img-responsive"
+                     for="info">
+                <div class="carousel-caption">
+                    <h3>{{filmMain.title}}</h3>
+                    <p>{{filmMain.synopsis}}</p>
+                </div>
+                </a>
+            </div>
+
+        </div>
+
+        <!-- Left and right controls -->
+        <a class="left carousel-control" href="#myCarousel" role="button" data-slide="prev">
+            <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+            <span class="sr-only">Previous</span>
+        </a>
+        <a class="right carousel-control" href="#myCarousel" role="button" data-slide="next">
+            <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+            <span class="sr-only">Next</span>
+        </a>
+    </div>
+
+
+</div>
+
+<div class="lists" >
+    <div ng-repeat="listMain in listMains" ng-hide="!listMain.films.length">
+        <div class="title">
+            <h2>{{listMain.title}}</h2>
+        </div>
+
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12 col-sm-8 col-xs-2">
+                    <carousel-multiple-element id="listMain.id" elements="listMain.films"></carousel-multiple-element>
+                </div>
+            </div>
+        </div>
+    </div>>
+</div>
+
+
+<div ng-controller="addFilmController" class="modal fade" id="myModal" role="dialog">
+    <form name="myForm" ng-submit="addFilm()">
+        <div class="modal-dialog">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">ADD FILM</h4>
+                </div>
+                <div class="form-group row">
+                    <label class="col-xs-2 col-form-label">Title</label>
+                    <div class="col-xs-9">
+                        <input ng-model="film.title" class="form-control" required>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label class="col-xs-2 col-form-label">Synopsis</label>
+                    <div class="col-xs-9">
+                        <input ng-model="film.synopsis" class="form-control">
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label class="col-xs-2 col-form-label">Genre</label>
+                    <div class="col-xs-9">
+                        <input ng-model="film.genre"  class="form-control">
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label class="col-xs-2 col-form-label">Year</label>
+                    <div class="col-xs-9">
+                        <input ng-model="film.year" class="form-control">
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label class="col-xs-2 col-form-label">Director</label>
+                    <div class="col-xs-9">
+                        <input ng-model="film.director" class="form-control">
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label class="col-xs-2 col-form-label">Actors</label>
+                    <div class="col-xs-9">
+                        <input ng-model="film.actors" class="form-control">
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label class="col-xs-2 col-form-label">Image</label>
+                    <div class="col-xs-9">
+                        <input ng-model="film.urlImage" class="form-control">
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label class="col-xs-2 col-form-label">Rating</label>
+                    <div class="col-xs-9">
+                        <select ng-model="film.rating" >
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                            <option value="4">4</option>
+                            <option value="5">5</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label class="col-xs-2 col-form-label">Path</label>
+                    <div class="col-xs-9">
+                        <input ng-model="film.path" class="form-control">
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-default">Save</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                </div>
+
+            </div>
+        </div>
+    </form>
+</div>

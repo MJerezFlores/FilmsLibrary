@@ -1,38 +1,31 @@
 package filmLibrary.model;
 
-public class Film {
-    private int id;
+public class FilmPublic {
+    private int idPublicFilm;
     private final String title;
     private final String synopsis;
     private final int year;
     private final String director;
     private final String actors;
-    private final float rating;
-    private final String urlImage;
-    private final String path;
     private final String genre;
+    private final String urlImage;
     private final String nickname;
-    private int idPublicFilm;
 
-    private Film(Builder builder){
-        this.id = builder.id;
+
+
+    private FilmPublic(Builder builder){
+        this.idPublicFilm = builder.idPublicFilm;
         this.title = builder.title;
         this.synopsis = builder.synopsis;
         this.year = builder.year;
         this.director = builder.director;
         this.actors = builder.actors;
-        this.rating = builder.rating;
+        this.genre=builder.genre;
         this.urlImage = builder.urlImage;
-        this.path = builder.path;
-        this.genre = builder.genre;
         this.nickname = builder.nickname;
-        this.idPublicFilm = builder.idPublicFilm;
+
     }
 
-
-    public int getId() {
-        return id;
-    }
 
     public String getTitle() {
         return title;
@@ -54,16 +47,8 @@ public class Film {
         return actors;
     }
 
-    public float getRating() {
-        return rating;
-    }
-
     public String getUrlImage() {
         return urlImage;
-    }
-
-    public String getPath() {
-        return path;
     }
 
     public String getGenre() {
@@ -80,22 +65,20 @@ public class Film {
         idPublicFilm = id;
     }
 
-    public static class Builder implements FilmBuilder<Film>{
+    public static class Builder implements FilmBuilder<FilmPublic>{
+        private final int idPublicFilm;
         private final String title;
-        private final int id;
         private String synopsis;
         private int year;
         private String director;
         private String actors;
-        private float rating;
         private String urlImage;
-        private String path;
         private String genre;
         private String nickname;
-        private int idPublicFilm;
 
-        public Builder(int id, String title){
-            this.id = id;
+
+        public Builder(int idPublicFilm, String title){
+            this.idPublicFilm = idPublicFilm;
             this.title = title;
         }
 
@@ -119,14 +102,14 @@ public class Film {
             return this;
         }
 
-        public Builder rating (float rating) {
-            this.rating = rating;
-            return this;
+        @Override
+        public FilmBuilder rating(float rating) {
+            return null;
         }
 
-        public Builder path (String path) {
-            this.path = path;
-            return this;
+        @Override
+        public FilmBuilder path(String path) {
+            return null;
         }
 
         public Builder urlImage (String urlImage) {
@@ -144,13 +127,14 @@ public class Film {
             return this;
         }
 
-        public Builder idPublicFilm (int idPublicFilm) {
-            this.idPublicFilm = idPublicFilm;
-            return this;
+        @Override
+        public FilmBuilder idPublicFilm(int idPublicFilm) {
+            return null;
         }
 
-        public Film build(){
-            return new Film(this);
+        @Override
+        public FilmPublic build(){
+            return new FilmPublic(this);
         }
 
     }
